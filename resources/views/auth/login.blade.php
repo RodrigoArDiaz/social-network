@@ -15,7 +15,7 @@
         <!-- Password -->
         <div class="mt-4 py-3" >
             <x-input-label for="password" :value="__('Password')" />
-            <div x-data="{show : false}" class="relative text-gray-600 focus-within:text-gray-400">
+            <div x-data="{show : true}" class="relative text-gray-600 focus-within:text-gray-400">
                 <input  :type="show ? 'password' : 'text'"
                         id="password"
                         name="password"

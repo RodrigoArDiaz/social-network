@@ -31,3 +31,12 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+/****************************************************************************************
+ *  Route web
+ */
+
+ /**
+  * Users
+  */
+Route::post('user/update_profile_image', [ProfileController::class, 'update_profile_image'])->name('user.update_profile_image');
