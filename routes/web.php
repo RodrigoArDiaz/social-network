@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    return redirect('login');
+
 });
 
 Route::get('/dashboard', function () {
@@ -29,3 +31,12 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+/****************************************************************************************
+ *  Route web
+ */
+
+ /**
+  * Users
+  */
+Route::post('user/update_profile_image', [ProfileController::class, 'update_profile_image'])->name('user.update_profile_image');
