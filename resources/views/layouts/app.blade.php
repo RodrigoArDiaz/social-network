@@ -37,5 +37,6 @@
 
         {{-- Scripts --}}
         <script src="/js/profile/index.js"></script>
+        <script src="/js/posts/post-create.js"></script>
     </body>
 </html>

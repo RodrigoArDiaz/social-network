@@ -3,31 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    /**
+    private $disk = 'public';
+    private $pathPost = 'posts/';
+    /****************************************
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index($user_id){
+        $user = User::find($user_id);
+        return view('posts',['posts' => $user->posts()->orderBy('created_at','desc')->get(), 'user' => $user]);
+        // return view('posts',['posts' => $user->posts()->orderBy('created_at','desc')->get()->load('comments'), 'user' => $user]);
     }
 
-    /**
+    /********************************************
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+
     }
 
-    /**
+    /********************************************
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -35,10 +41,59 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Obtengo usuario autenticado;
+         $user = auth()->user();
+
+        //Recuperacion de imagen
+        $image = $request->file('image');
+
+        //Validaciones aqui
+        if (empty($request->content)) {
+            //Post no debe estar vacio
+            $message_error = "Post can't be empty!";
+            session()->flash('error', true);
+            session()->flash('message_error', $message_error);
+        }elseif (strlen($request->content) > 255) {
+            //Post no debe superar los 300 caracteres
+            $message_error = "Post's lenght is more than 300 characters!";
+            session()->flash('error', true);
+            session()->flash('message_error', $message_error);
+        }else {
+            $hasImage = false;
+            if (isset($image)) {
+                //Si se envio el archivo, se verifica que el tipo sea imagen
+                if (strpos($image->getMimeType(), 'image') ===  false) {
+                    $message_error = "File type not allowed. Only images are allowed (png, jpg, ico)";
+                    session()->flash('error', true);
+                    session()->flash('message_error', $message_error);
+                    return redirect()->route('posts',$user->id);
+                }else $hasImage = true;
+            }
+
+            if($hasImage) {
+                //Creo nuevo post
+                $post = new Post(['content' => $request->content, 'user_id' => $user->id]);
+                $post->save();
+                //Guardo archivo
+                $name = str_replace(' ','_',$user->name ).'_'.$user->id.'_post_'.$post->id;
+                $name_with_extension = $image->storeAs($this->pathPost, $name.".".$image->extension(), $this->disk);
+                //Se obiene el path de la imagen
+                $path_image =asset(Storage::disk($this->disk)->url($name_with_extension));
+                //Se guarda imagen en el post
+                $post->image = $path_image;
+                $post->save(); //Guardo datos sin actualizar fecha
+            }else{
+                $post = new Post(['content' => $request->content, 'user_id' => $user->id]);
+                $post->save();
+            }
+            //Guardo datos
+            session()->flash('error', false);
+            session()->flash('message_error', '');
+        }
+         return redirect()->route('posts',$user->id);
     }
 
-    /**
+    /**************************************
      * Display the specified resource.
      *
      * @param  \App\Models\Post  $post
@@ -49,7 +104,7 @@ class PostController extends Controller
         //
     }
 
-    /**
+    /****************************************
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Post  $post
@@ -60,7 +115,7 @@ class PostController extends Controller
         //
     }
 
-    /**
+    /****************************************
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -72,7 +127,7 @@ class PostController extends Controller
         //
     }
 
-    /**
+    /****************************************
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Post  $post
