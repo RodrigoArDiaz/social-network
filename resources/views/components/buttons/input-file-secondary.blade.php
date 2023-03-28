@@ -1,4 +1,4 @@
-@props(['id'])
+@props(['id','form'])
 
 <div class="p-0 m-0">
     <label for="{{$id}}" class=" hover:border-gray-400 hover:text-gray-500
@@ -12,6 +12,7 @@
         name="{{$id}}"
         type="file"
         accept="image/*"
-        form="form-create-post"
+        {{-- form="form-create-post" --}}
+        form="{{$form}}"
         class="hidden"/>
 </div>
