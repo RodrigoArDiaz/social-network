@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,3 +41,12 @@ require __DIR__.'/auth.php';
   * Users
   */
 Route::post('user/update_profile_image', [ProfileController::class, 'update_profile_image'])->name('user.update_profile_image');
+
+/**
+ * Posts
+ */
+Route::get('post/{user_id}', [PostController::class, 'index'])->name('posts');
+Route::post('post/', [PostController::class, 'store'])->name('post.store');
+Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.delete');
+Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
+Route::patch('/post/{post}',[PostController::class, 'update'])->name('post.update');
