@@ -50,4 +50,24 @@ class User extends Authenticatable
     public function posts(){
         return $this->hasMany(Post::class);
     }
+
+
+    /**
+     * Auto relacion N a N , usuarios que sigue
+     */
+    public function followingTo()
+    {
+        return $this->belongsToMany(User::class,'followers', 'user_id_send', 'user_id_receive')->withTimestamps();
+
+    }
+
+
+    /**
+     * Auto relacion N a N , usuarios que siguen al usuario
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(User::class,'followers', 'user_id_receive', 'user_id_send')->withTimestamps();
+
+    }
 }
