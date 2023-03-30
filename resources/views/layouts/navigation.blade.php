@@ -19,8 +19,15 @@
 
                 {{-- My posts --}}
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('posts', auth()->user()->id)" :active="request()->routeIs('posts')">
+                    <x-nav-link :href="route('posts', auth()->user()->id)" :active="request()->is('post/'.auth()->user()->id)"> {{-- Activo solo si el post pertenecl al usuario--}}
                         {{ __('My posts') }}
+                    </x-nav-link>
+                </div>
+
+                {{-- Connectar --}}
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('connect')" :active="request()->routeIs('connect') || request()->routeIs('search')">
+                        {{ __('Connect') }}
                     </x-nav-link>
                 </div>
             </div>
