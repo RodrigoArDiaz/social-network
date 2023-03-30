@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\ConnectsController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,3 +52,10 @@ Route::post('post/', [PostController::class, 'store'])->name('post.store');
 Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.delete');
 Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
 Route::patch('/post/{post}',[PostController::class, 'update'])->name('post.update');
+
+/**
+ * Connects
+ */
+Route::get('connect', [ConnectsController::class, 'index'])->name('connect');
+Route::post('connect/search', [ConnectsController::class, 'search'])->name('search');
+Route::post('connect/follow', [ConnectsController::class, 'follow'])->name('follow');

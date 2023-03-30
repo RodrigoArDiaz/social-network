@@ -4,6 +4,7 @@ let imagePostCreate;
 let imagePostCreateContainer;
 let imagePostCreateShow;
 let deleteImagePost;
+let postInput;
 
 /*********************************** */
 window.addEventListener("load", () => {

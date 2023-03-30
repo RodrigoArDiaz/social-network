@@ -1,9 +1,26 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('My posts') }}
+            @if ($user->id == Auth::user()->id)
+                {{ __('My posts') }}
+            @else
+                <div class="flex items-center gap-4">
+                    <div>
+                        <img class="w-8 h-8 rounded-full object-cover"
+                            src="{{$user->profile_image }}" alt=""
+                        >
+                    </div>
+
+                        {{$user->name}}
+
+                </div>
+            @endif
         </h2>
     </x-slot>
+
+    @php
+        $isUserPost = ($user->id == Auth::user()->id) ? true : false;
+    @endphp
 
 
     {{-- Create post --}}
@@ -19,7 +36,7 @@
                             {{-- User profile image --}}
                             <div class="hidden sm:flex flex-col justify-start min-w-[2rem]">
                                 <div>
-                                    <img class="w-8 h-8 rounded-full"
+                                    <img class="w-8 h-8 rounded-full object-cover"
                                         src="{{$user->profile_image }}" alt=""
                                     >
                                 </div>
@@ -96,7 +113,7 @@
     @if (isset($posts))
        @if (count($posts) != 0)
            @foreach ($posts as $post )
-               <x-post :user="$user" :post="$post"/>
+               <x-post :user="$user" :post="$post" :isUserPost="$isUserPost"/>
            @endforeach
        @else
            {{-- If user hasn't post  --}}
@@ -106,7 +123,14 @@
                        <div class=" divide-y divide-slate-400/20 rounded-lg bg-transparent leading-5 text-slate-900   ring-slate-700/10">
                                    {{-- Post's comments --}}
                                    <div class="flex items-center p-2 justify-center">
-                                           <p class="text-lg">You don't create any post yet</p>
+                                           <p class="text-lg">
+                                            @if ($isUserPost)
+                                                You haven't created a post yet
+                                            @else
+                                                {{$user->name}} hasn't created a post yet
+                                            @endif
+
+                                            </p>
                                    </div>
                        </div>
 

@@ -23,6 +23,13 @@
                         {{ __('My posts') }}
                     </x-nav-link>
                 </div>
+
+                {{-- Connectar --}}
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('connect')" :active="request()->routeIs('connect')">
+                        {{ __('Connect') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
