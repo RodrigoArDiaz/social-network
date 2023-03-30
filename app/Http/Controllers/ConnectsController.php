@@ -116,12 +116,40 @@ class ConnectsController extends Controller
             ],200);
         }else {
             User::find($user_id_send)->followingTo()->attach($user_id_receive);
+
+            if (User::find($user_id_receive)->followingTo()->get()->contains($user_id_send))  $connected  = true;
+            else $connected = false;
+            // $connected = User::find($user_id_receive)->followingTo()->get()->contains($user_id_send) ? true : false;
             return response()->json([
                 'state' => true,
-                'message' => 'Follow-up request sent successfully.'
+                'message' => 'Follow-up request sent successfully.',
+                'isConnected' =>  $connected
             ],200);
         }
      }
+
+     /**
+     *  Realiza la desconexion entre dos usuarios
+     */
+    public function unfollow(Request $request)
+    {
+       $user_id_send = auth()->user()->id;
+       $user_id_receive = $request->user_id_unfollow;
+       //Comprueba si ya se dejo de seguir al usuario
+       if(User::find($user_id_send)->followingTo()->get()->contains($user_id_receive)){
+            User::find($user_id_send)->followingTo()->detach($user_id_receive); //deja de seguir
+            return response()->json([
+                'state' => true,
+                'message' => 'Unfollowed succesfully.'
+            ],200);
+       }else {
+           return response()->json([
+               'state' => false,
+               'message' => 'This user is already being unfollowed.',
+           ],200);
+       }
+    }
+
 
 
 }

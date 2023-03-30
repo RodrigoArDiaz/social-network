@@ -59,3 +59,4 @@ Route::patch('/post/{post}',[PostController::class, 'update'])->name('post.updat
 Route::get('connect', [ConnectsController::class, 'index'])->name('connect');
 Route::post('connect/search', [ConnectsController::class, 'search'])->name('search');
 Route::post('connect/follow', [ConnectsController::class, 'follow'])->name('follow');
+Route::post('connect/unfollow', [ConnectsController::class, 'unfollow'])->name('unfollow');

@@ -8,7 +8,7 @@
                  <div class="flex items-center p-4 pl-4">
                     {{-- User profile image --}}
                     <div class="basis">
-                        <img class="w-8 h-8 rounded-full mx-auto"
+                        <img class="w-8 h-8 rounded-full mx-auto object-cover"
                             src="{{$user->profile_image}}" alt=""
                         >
                     </div>

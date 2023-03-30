@@ -19,7 +19,17 @@ class PostController extends Controller
      */
     public function index($user_id){
         $user = User::find($user_id);
-        return view('posts',['posts' => $user->posts()->orderBy('created_at','desc')->get(), 'user' => $user]);
+        $isFollowing = false; //Indica si el usuario actual esta siguiendo o no al usuario del post
+        $isFollower = false;
+        if(auth()->user()->id != $user_id){
+            if ($user->followers()->get()->contains(auth()->user()->id )) {
+                $isFollowing = true;
+            }
+            if ($user->followingTo()->get()->contains(auth()->user()->id)) {
+                $isFollower = true;
+            }
+        }
+        return view('posts',['posts' => $user->posts()->orderBy('created_at','desc')->get(), 'user' => $user, 'isFollowing' => $isFollowing, 'isFollower' => $isFollower]);
         // return view('posts',['posts' => $user->posts()->orderBy('created_at','desc')->get()->load('comments'), 'user' => $user]);
     }
 
