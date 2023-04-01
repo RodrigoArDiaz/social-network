@@ -29,8 +29,38 @@ class PostController extends Controller
                 $isFollower = true;
             }
         }
-        return view('posts',['posts' => $user->posts()->orderBy('created_at','desc')->get(), 'user' => $user, 'isFollowing' => $isFollowing, 'isFollower' => $isFollower]);
-        // return view('posts',['posts' => $user->posts()->orderBy('created_at','desc')->get()->load('comments'), 'user' => $user]);
+
+        //Se obtiene el numero de followers, followings y connects
+        $numberOfFollowers = $user->followers()->count();
+        $numberOfFollowing = $user->followingTo()->count();
+        $numberOfPosts = $user->posts()->count();
+
+        $numberOfConnections = 0;
+        //Metodo secuencial: Se cuenta la cantidad de seguidos que tambien siguen al usuario
+        // $followers = $user->followers()->get();
+        // foreach ($followers as $follower) {
+        //     if ($user->followingTo()->get()->contains($follower['id'])) {
+        //         $numberOfConnections++;
+        //     }
+        // }
+
+        //Se cuenta la cantidad de seguidos que tambien siguen al usuario
+        $numberOfConnections = $user->followingTo()->whereIn('user_id_receive',function($query) use ($user){
+                                                                                    $query->select('user_id_send')
+                                                                                            ->from('followers')
+                                                                                            ->where('user_id_receive','=', $user->id);
+                                                                                }
+        )->count();
+
+        return view('posts',[   'posts' => $user->posts()->orderBy('created_at','desc')->get(),
+                                'user' => $user,
+                                'isFollowing' => $isFollowing,
+                                'isFollower' => $isFollower,
+                                'numberOfFollowers' => $numberOfFollowers,
+                                'numberOfFollowing' => $numberOfFollowing,
+                                'numberOfConnections' => $numberOfConnections,
+                                'numberOfPosts' => $numberOfPosts,
+                            ]);
     }
 
     /********************************************

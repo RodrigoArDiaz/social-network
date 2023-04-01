@@ -1,8 +1,9 @@
 @props(['user','post', 'isUserPost'])
 
 <div class="py-0 ">
-    <div class=" mx-auto xs:px-1 sm:px-6 lg:px-60 xl:px-[35rem]">
-        <div class="relative py-4">
+    {{-- <div class=" mx-auto xs:px-1 sm:px-6 lg:px-60 xl:px-[35rem]"> --}}
+    <div class="">
+        <div class="relative">
             <div class=" divide-y divide-slate-400/20 rounded-lg bg-white text-[0.8125rem] leading-5 text-slate-900   ring-slate-700/10">
                  {{-- User information --}}
                  <div class="flex items-center p-4 pl-4">
