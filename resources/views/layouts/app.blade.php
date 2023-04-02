@@ -36,13 +36,19 @@
         </div>
 
         {{-- Scripts --}}
-        <script src="/js/profile/index.js"></script>
-        <script src="/js/posts/post-create.js"></script>
-        <script src="/js/posts/post-edit.js"></script>
-        <script src="/js/posts/post-follow.js"></script>
-        <script src="/js/posts/post-unfollow.js"></script>
-        <script src="/js/posts/post-unfollow.js"></script>
-
+        <script src="/js/helpers/index.js"></script>
+        @if (request()->routeIs('profile.edit'))
+            <script src="/js/profile/index.js"></script>
+        @endif
+        @if (request()->routeIs('post.edit'))
+            <script src="/js/posts/post-edit.js"></script>
+        @endif
+        @if (request()->routeIs('posts'))
+            <script src="/js/posts/post-create.js"></script>
+            <script src="/js/posts/post-follow.js"></script>
+            <script src="/js/posts/post-unfollow.js"></script>
+            <script src="/js/posts/post-unfollow.js"></script>
+        @endif
         @if (request()->routeIs('connect') || request()->routeIs('search'))
             <script src="/js/connect/connect-follow.js"></script>
             <script src="/js/connect/connect-search-more-results.js"></script>
