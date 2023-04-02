@@ -24,5 +24,12 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Relacion N a N entre tabla Posts y Tabla Users
+     */
+    public function likes(){
+        return $this->belongsToMany(User::class, 'likes')->withTimestamps();
+    }
+
 
 }
