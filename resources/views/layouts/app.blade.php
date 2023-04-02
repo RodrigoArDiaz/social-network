@@ -39,8 +39,14 @@
         <script src="/js/profile/index.js"></script>
         <script src="/js/posts/post-create.js"></script>
         <script src="/js/posts/post-edit.js"></script>
-        <script src="/js/connect/connect-follow.js"></script>
         <script src="/js/posts/post-follow.js"></script>
         <script src="/js/posts/post-unfollow.js"></script>
+        <script src="/js/posts/post-unfollow.js"></script>
+
+        @if (request()->routeIs('connect') || request()->routeIs('search'))
+            <script src="/js/connect/connect-follow.js"></script>
+            <script src="/js/connect/connect-search-more-results.js"></script>
+        @endif
+
     </body>
 </html>
