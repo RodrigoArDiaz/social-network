@@ -60,3 +60,4 @@ Route::get('connect', [ConnectsController::class, 'index'])->name('connect');
 Route::post('connect/search', [ConnectsController::class, 'search'])->name('search');
 Route::post('connect/follow', [ConnectsController::class, 'follow'])->name('follow');
 Route::post('connect/unfollow', [ConnectsController::class, 'unfollow'])->name('unfollow');
+Route::post('connect/search-more', [ConnectsController::class, 'searchMoreResults'])->name('search-more');

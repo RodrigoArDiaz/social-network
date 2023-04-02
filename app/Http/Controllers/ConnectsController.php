@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class ConnectsController extends Controller
 {
+    private $offset = 0;
+    private $limit = 10;
     /**
      * Display a listing of the resource.
      *
@@ -17,92 +19,65 @@ class ConnectsController extends Controller
         return view('connect');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-
-    /**
+    /*********
      * Search user
      */
     public function search(Request $request)
     {
+        //Reseteo a valor inicial
+        session(['userSearchOffset' => $this->offset]);
+
         //Verificaciones
         if (empty($request->name)) {
             return view('connect',[ 'state_search' => false, 'users'=> [], 'search_key' => '' ]);
         }
 
+        //Guardo criterio de busqueda
+        session(['userNameSearch' => $request->name]);
+
         //usuarios que cumplan el criterio, no se carga el usuario actual
-        // $users =   User::where('name','LIKE',"%{$request->name}%")->where('id','!=',auth()->user()->id)->get();
-        $users =   User::where('name','LIKE',"%{$request->name}%")->where('id','!=',auth()->user()->id)->get()->load([ 'followers' => fn ($query) => $query->where('user_id_send', auth()->user()->id) ]);
+        $users =   User::where('name','LIKE',"%{$request->name}%")
+                        ->where('id','!=',auth()->user()->id)
+                        ->orderBy('name', 'ASC')
+                        ->offset($this->offset)
+                        ->limit($this->limit)
+                        ->get()
+                        ->load([ 'followers' => fn ($query) => $query->where('user_id_send', auth()->user()->id) ]);
 
         return view('connect',[ 'state_search' => true, 'users'=> $users, 'search_key' => $request->name ]);
     }
 
+     /**********
+     * Search user, more results
+     */
+    public function searchMoreResults()
+    {
+        //Recupero valor de busqueda
+        $name = session('userNameSearch');
+        //Recupero offset y aumento
+        $offset =   session('userSearchOffset');
+        $offset = $offset + $this->limit;
+        session(['userSearchOffset' => $offset]);
+
+        //usuarios que cumplan el criterio, no se carga el usuario actual
+        $users =   User::where('name','LIKE',"%{$name}%")
+                        ->where('id','!=',auth()->user()->id)
+                        ->orderBy('name', 'ASC')
+                        ->offset($offset)
+                        ->limit($this->limit)
+                        ->get()
+                        ->load([ 'followers' => fn ($query) => $query->where('user_id_send', auth()->user()->id) ]);
+        //Se retorna json
+        return response()->json([
+            'state' => true,
+            'users' => $users,
+            'offset' => $offset,
+            'limit' => $this->limit
+        ],200);
+    }
+
     /**
-     *  Realiza la conexion entre dos usuarios
+     *  Realiza la conexion entre dos usuarios (follow)
      */
      public function follow(Request $request)
      {
@@ -129,7 +104,7 @@ class ConnectsController extends Controller
      }
 
      /**
-     *  Realiza la desconexion entre dos usuarios
+     *  Realiza la desconexion entre dos usuarios (unfollow)
      */
     public function unfollow(Request $request)
     {

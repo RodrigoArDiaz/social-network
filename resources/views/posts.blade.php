@@ -82,26 +82,14 @@
     @endphp
 
 
-    <div class="flex
-                flex-col md:flex-row
-                space-y-5 md:space-y-0
-                space-x-0 md:space-x-10 lg:space-x-15 xl:space-x-20
-                mx-3 sm:mx-20 md:mx-5 lg:mx-10 xl:mx-20 2xl:mx-48
-                mt-6
-                pb-6
-                h-max
-                ">
-
+    <x-containers.main-container>
         {{-- Left section --}}
-        <div class="basis-0 md:basis-1/3 xl:basis-1/4
-                    self-auto static
-                    md:self-start md:sticky md:top-6
-                    ">
+        <x-containers.left-section>
             @include('post.post-profile-information')
-        </div>
+        </x-containers.left-section>
 
         {{-- Main section --}}
-        <div class="basis-0 md:basis-2/3 xl:basis-2/4">
+        <x-containers.main-section>
             {{-- Create post --}}
             @if ($user->id == Auth::user()->id)
                 {{-- Create post  --}}
@@ -224,14 +212,11 @@
             @else
                 <p>Error</p>
             @endif
-        </div>
+        </x-containers.main-section>
 
         {{-- Right section --}}
-        <div class="basis-0 hidden xl:flex xl:basis-1/4
-                    self-auto static
-                    md:self-start md:sticky md:top-6
-                    ">
-                    {{-- Content --}}
-        </div>
-    </div>
+        <x-containers.right-section>
+                {{-- Content --}}
+        </x-containers.right-section>
+    </x-containers.main-container>
 </x-app-layout>
