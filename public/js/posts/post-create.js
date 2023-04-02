@@ -59,11 +59,3 @@ window.addEventListener("load", () => {
 const auto_grow = (element) => {
     element.style.height = element.scrollHeight + "px";
 };
-
-/***************************************
- * Helpers
- */
-//Search a element by id y return it
-const getElement = (id) => {
-    return document.getElementById(id);
-};
