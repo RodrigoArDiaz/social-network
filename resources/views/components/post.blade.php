@@ -1,7 +1,6 @@
 @props(['user','post', 'isUserPost'])
 
 <div class="py-0 ">
-    {{-- <div class=" mx-auto xs:px-1 sm:px-6 lg:px-60 xl:px-[35rem]"> --}}
     <div class="">
         <div class="relative">
             <div class=" divide-y divide-slate-400/20 rounded-lg bg-white text-[0.8125rem] leading-5 text-slate-900   ring-slate-700/10">
@@ -144,34 +143,59 @@
 
 
                 {{-- Post's comments --}}
-                <div class="relative  overflow-hidden  divide-y divide-slate-400/20 rounded-b-lg bg-white text-[0.8125rem] leading-5 text-slate-900   ring-slate-700/10">
-                    <input type="checkbox" class="peer absolute top-0 inset-x-0 w-full h-12 opacity-0 z-10 cursor-pointer" name="show-comments" id="show-comments" data-id="{{$post->id}}">
-                    <div class="flex justify-center border-none py-2">
 
-                        <button class="basis inline-flex  sw-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
-                               >
-                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+
+
+
+                <div class="relative  overflow-hidden  divide-y divide-slate-400/20 rounded-b-lg bg-white text-[0.8125rem] leading-5 text-slate-900   ring-slate-700/10">
+                    <div class="flex justify-between border-none p-2">
+                        @if ($user->id != Auth::user()->id)
+                            <div class="flex items-center">
+                                @php
+                                    $userLikeToPostActive = '';
+                                    if (count($post->likes) != 0) { /*likes: si esta vacio indica que el autenticado no likeo el post*/
+                                        $userLikeToPostActive = 'text-red-500';
+                                    }
+                                @endphp
+                                <x-buttons.icon-button-secondary class="{{$userLikeToPostActive}} border-opacity-0 shadow-none flex" id="button-like-post" data="{{$post->id}}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                    </svg>
+                                </x-buttons.icon-button-secondary>
+                                <p class="text-base text-gray-700 font-semibold">
+                                    @php
+                                        $numberOfLikes = '';
+                                        if ($post->likes_count != 0) {
+                                            $numberOfLikes = $post->likes_count;
+                                        }
+                                    @endphp
+                                    {{$numberOfLikes}}
+                                </p>
+                            </div>
+                        @endif
+
+
+                        <button class="basis inline-flex  sw-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
                             </svg>
                             <p class="text-sm">
-
                                 {{-- @if (count($post->comments) > 0)
                                     {{count($post->comments)}} comments
 
                                 @else
                                     Not comments
                                 @endif --}}
-
                             </p>
                         </button>
-                    </div>
 
+
+                    </div>
+                    <input type="checkbox" class="peer absolute top-0 inset-x-0 w-full h-12 opacity-0 z-10 cursor-pointer" name="show-comments" id="show-comments" data-id="{{$post->id}}">
                     <div id="container-comments-{{$post->id}}"  class="bg-white overflow-hidden transition-all duration-500 max-h-0 border-none  peer-checked:max-h-max  peer-checked:border peer-checked:border-gray-900">
 
-
+                            {{-- Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique esse veritatis quibusdam corporis? Ut provident quasi nostrum. Quia deleniti est ex quam laudantium ipsa rerum harum cumque. Minus, fugit a? --}}
                     </div>
-
-
                 </div>
 
 

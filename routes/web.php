@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ConnectsController;
+use App\Http\Controllers\LikesController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
@@ -61,3 +62,8 @@ Route::post('connect/search', [ConnectsController::class, 'search'])->name('sear
 Route::post('connect/follow', [ConnectsController::class, 'follow'])->name('follow');
 Route::post('connect/unfollow', [ConnectsController::class, 'unfollow'])->name('unfollow');
 Route::post('connect/search-more', [ConnectsController::class, 'searchMoreResults'])->name('search-more');
+
+/**
+ * Likes
+ */
+Route::get('post/{post_id}/toggle-like', [LikesController::class, 'store'])->name('post.like.store');
