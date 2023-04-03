@@ -31,5 +31,13 @@ class Post extends Model
         return $this->belongsToMany(User::class, 'likes')->withTimestamps();
     }
 
+     /**
+     * Relacion N a N entre tabla Posts y Tabla Users
+     */
+    public function comments(){
+        return $this->belongsToMany(User::class, 'comments')->withPivot('content')->withTimestamps();
+    }
+
+
 
 }
