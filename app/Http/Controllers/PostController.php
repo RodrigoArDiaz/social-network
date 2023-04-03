@@ -52,7 +52,16 @@ class PostController extends Controller
                                                                                 }
         )->count();
 
-        return view('posts',[   'posts' => $user->posts()->orderBy('created_at','desc')->get(),
+        return view('posts',[   'posts' => $user->posts()
+                                                ->orderBy('created_at','desc')
+                                                ->get()
+                                                //Returna la cantidad de likes del post
+                                                ->loadCount('likes')
+                                                //Returna un array con informacion del usuario autenticado, solo si este le dio like al post, sino returna un array vacio
+                                                ->load(['likes'  => function($query) use ($user){ //
+                                                                $query->select('users.id')->where('user_id','=', auth()->user()->id);
+                                                }]),
+
                                 'user' => $user,
                                 'isFollowing' => $isFollowing,
                                 'isFollower' => $isFollower,
