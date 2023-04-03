@@ -109,44 +109,45 @@
                 @endif
 
 
-
-
-
                 {{-- Comment --}}
-                {{-- @if ($user->id != Auth::user()->id)
+                @if ($user->id != Auth::user()->id)
                     <div class="flex items-center gap-4 p-4 py-2 pl-4">
 
                         <div class="basis">
                             <img class="w-8 h-8 rounded-full mx-auto"
-                                src="{{Auth::user()->profile_image_url}}" alt=""
+                                src="{{Auth::user()->profile_image}}" alt="user's  profile image"
                             >
                         </div>
                         <div class="basis flex-auto">
 
-                            <form method="POST" action="{{ route('comment.store') }}"  id="form-comment-post">
+                            <form method="POST"
+                             {{-- action="{{ route('comment.store') }}"   --}}
+                             id="form-comment-post-{{$post->id}}" class="forms-comment">
                                 @csrf
                                 @method('POST')
-                                <textarea id="content" name="content" rows="1" class="block p-2.5 w-full text-base resize-none overflow-hidden text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-indigo-400 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Comment"></textarea>
+                                <textarea id="content-comment-{{$post->id}}" name="content_comment" rows="1" class="block p-2.5 w-full text-base resize-none overflow-hidden text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-indigo-400 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Comment"></textarea>
                                 <input type ='text' name="post_id" id="post_id" value="{{$post->id}}" hidden/>
                             </form>
                         </div>
 
                         <div class="basis flex">
                             <div >
-                                <x-primary-button id="submit-create-form" type="submit"  form="form-comment-post" >Comment</x-primary-button>
+                                <x-primary-button id="submit-comment-form-{{$post->id}}" type="submit"  form="form-comment-post-{{$post->id}}" >
+                                    <svg id="comment-button-{{$post->id}}" class="animate-spin -ml-1 mr-2 h-4 w-4 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Comment
+                                </x-primary-button>
                             </div>
                         </div>
 
                     </div>
-                @endif --}}
+                @endif
 
 
 
                 {{-- Post's comments --}}
-
-
-
-
                 <div class="relative  overflow-hidden  divide-y divide-slate-400/20 rounded-b-lg bg-white text-[0.8125rem] leading-5 text-slate-900   ring-slate-700/10">
                     <div class="flex justify-between border-none p-2">
                         @if ($user->id != Auth::user()->id)

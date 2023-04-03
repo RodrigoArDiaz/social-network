@@ -77,4 +77,11 @@ class User extends Authenticatable
     public function likes(){
         return $this->belongsToMany(Post::class, 'likes')->withTimestamps();
     }
+
+    /**
+     * Relacion N a N entre tabla Users y tabla  Posts
+     */
+    public function comments(){
+        return $this->belongsToMany(Post::class, 'comments')->withPivot('content')->withTimestamps();
+    }
 }

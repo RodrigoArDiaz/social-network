@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\ConnectsController;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\PostController;
@@ -67,3 +68,9 @@ Route::post('connect/search-more', [ConnectsController::class, 'searchMoreResult
  * Likes
  */
 Route::get('post/{post_id}/toggle-like', [LikesController::class, 'store'])->name('post.like.store');
+
+/**
+ * Comments
+ */
+// Route::get('post/{post_id}/comment', [CommentsController::class, 'store'])->name('post.comment.store');
+Route::post('post/comment', [CommentsController::class, 'store'])->name('post.comment.store');
