@@ -55,10 +55,18 @@ class CommentsController extends Controller
 
             //Se guarda el comenteario
             $post->comments()->attach(auth()->user()->id, ['content' => $request->content_comment]);
+
+            $comment = $post->comments()
+                            ->get()
+                            ->last();
+            $comment->pivot['created_at_formated'] =  $comment->pivot->created_at->toDayDateTimeString();
+
             //
             return response()->json([
                 'state' => true,
                 'message' => 'Operation successfully.',
+                'comment' =>   $comment,
+                'amountOfComments' => $post->comments()->count()
             ],200);
         }else{
             return response()->json([
