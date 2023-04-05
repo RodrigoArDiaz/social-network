@@ -60,7 +60,8 @@ class PostController extends Controller
                                                 //Returna un array con informacion del usuario autenticado, solo si este le dio like al post, sino returna un array vacio
                                                 ->load(['likes'  => function($query) use ($user){ //
                                                                 $query->select('users.id')->where('user_id','=', auth()->user()->id);
-                                                }]),
+                                                }])
+                                                ->loadCount('comments'),
 
                                 'user' => $user,
                                 'isFollowing' => $isFollowing,

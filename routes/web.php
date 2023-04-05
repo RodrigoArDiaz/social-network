@@ -72,5 +72,6 @@ Route::get('post/{post_id}/toggle-like', [LikesController::class, 'store'])->nam
 /**
  * Comments
  */
-// Route::get('post/{post_id}/comment', [CommentsController::class, 'store'])->name('post.comment.store');
 Route::post('post/comment', [CommentsController::class, 'store'])->name('post.comment.store');
+Route::post('post/comment/list', [CommentsController::class, 'list'])->name('post.comment.list');
+Route::post('post/comment/list-more', [CommentsController::class, 'listMore'])->name('post.comment.list');

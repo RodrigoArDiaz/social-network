@@ -2,7 +2,7 @@
 <button {{ $attributes->merge(['type' => 'button',
                                'class' => 'p-2 border rounded-full bg-transparent z-50  right-3 top-2  active:text-gray-500
                                             items-center  bg-white dark:bg-gray-800  border-gray-300 dark:border-gray-500  font-semibold
-                                            text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50
+                                            text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest  hover:bg-gray-50
                                             dark:hover:bg-gray-700 active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2
                                             dark:active:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150'])}} >
     {{-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
