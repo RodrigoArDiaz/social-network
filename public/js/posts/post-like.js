@@ -17,6 +17,9 @@ const handlerClickButtonLike = (e) => {
     let element = e.currentTarget;
     console.log(element.nextElementSibling);
     let postId = element.getAttribute("data");
+    let containerAmountLikes = document.getElementById(
+        `amount-likes-post-${postId}`
+    );
     axios
         .get(`${postId}/toggle-like`)
         .then((res) => {
@@ -24,11 +27,11 @@ const handlerClickButtonLike = (e) => {
             if (res.data.like) {
                 element.classList.add("text-red-500");
                 element.classList.add("focus:text-red-500");
-                element.nextElementSibling.innerText = res.data.number_like;
+                containerAmountLikes.innerText = res.data.number_like;
             } else {
                 element.classList.remove("text-red-500");
                 element.classList.remove("focus:text-red-500");
-                element.nextElementSibling.innerText = res.data.number_like;
+                containerAmountLikes.innerText = res.data.number_like;
             }
         })
         .catch((error) => {});
