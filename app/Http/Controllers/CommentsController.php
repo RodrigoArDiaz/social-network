@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CommentsController extends Controller
 {
@@ -40,6 +41,7 @@ class CommentsController extends Controller
                             ->get()
                             ->last();
             $comment->pivot['created_at_formated'] =  $comment->pivot->created_at->toDayDateTimeString();
+            $comment['commentBelongsToCurrentUser'] = $comment->pivot->user_id == auth()->user()->id;
 
             //
             return response()->json([
@@ -75,6 +77,8 @@ class CommentsController extends Controller
                                     ->each(function($comment){
                                         //Se envia un campo con la fecha de creacion del comentario con formato
                                          $comment->pivot['created_at_formated'] =  $comment->pivot->created_at->toDayDateTimeString();
+                                         //Se indica si el comentario pertenece o no al usuario actual
+                                         $comment['commentBelongsToCurrentUser'] = $comment->pivot->user_id == auth()->user()->id;
                                          return $comment;
                                     }),
                 'amountOfComments' => $post->comments()->count(),
@@ -123,6 +127,8 @@ class CommentsController extends Controller
                                     ->each(function($comment){
                                         //Se envia un campo con la fecha de creacion del comentario con formato
                                          $comment->pivot['created_at_formated'] =  $comment->pivot->created_at->toDayDateTimeString();
+                                         //Se indica si el comentario pertenece o no al usuario actual
+                                         $comment['commentBelongsToCurrentUser'] = $comment->pivot->user_id == auth()->user()->id;
                                          return $comment;
                                     }),
                 'nextPage' => $page + 1, //Proxima pagina a cargar
@@ -135,6 +141,45 @@ class CommentsController extends Controller
             ],200);
         }
 
+    }
+
+      /****************************************
+     * Remove the specified resource from storage.
+     *
+     */
+    public function destroy(Request $request)
+    {
+        //Se verifica si se envio el id del comentario.
+        if (!isset($request->commentId)) {
+            return response()->json([
+                'state' => false,
+                'message' => 'Operation fail. Comment id no send.',
+            ],200);
+        }
+        //Se recupera id del comentario.
+        $comment_id = $request->commentId;
+        //Se busca comentario.
+        $comment = DB::table('comments')->where('id',$comment_id)->first();
+        //Se verifica si existe el comentario.
+        if (!$comment) {
+            return response()->json([
+                'state' => false,
+                'message' => 'Operation fail. Comment not found.',
+            ],200);
+        }
+        //Se verifica si el comentario pertenece al usuario
+        if ( !($comment->user_id == auth()->user()->id)) {
+            return response()->json([
+                'state' => false,
+                'message' => 'Operation fail. Comment does not belong to the user.',
+            ],200);
+        }
+        //Se elimina el comentario.
+        DB::table('comments')->where('id',$comment_id)->delete();
+        return response()->json([
+            'state' => true,
+            'message' => 'Operation succesfull.',
+        ],200);
     }
 
 }

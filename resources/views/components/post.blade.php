@@ -144,8 +144,6 @@
                 </div>
 
 
-
-
                 {{-- Post's comments --}}
                 <div class="relative  overflow-hidden   rounded-b-lg bg-white text-[0.8125rem] leading-5 text-slate-900   ring-slate-700/10">
                     <div class="flex justify-evenly gap-4 border-none p-2">

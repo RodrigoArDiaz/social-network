@@ -82,6 +82,6 @@ class User extends Authenticatable
      * Relacion N a N entre tabla Users y tabla  Posts
      */
     public function comments(){
-        return $this->belongsToMany(Post::class, 'comments')->withPivot('content')->withTimestamps();
+        return $this->belongsToMany(Post::class, 'comments')->withPivot(['content', 'id'])->withTimestamps();
     }
 }

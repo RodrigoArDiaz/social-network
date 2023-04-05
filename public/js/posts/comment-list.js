@@ -37,12 +37,15 @@ const handlerShowComment = (e) => {
         axios
             .post(`/post/comment/list`, { postId: postId })
             .then((resp) => {
+                console.log(resp.data);
                 //Se esconde el spinner
                 spinnerContainerComments.classList.add("hidden");
                 spinnerContainerComments.classList.remove("flex");
 
                 if (resp.data.state) {
                     appendComments(resp.data, postId, true);
+                    //Se añade evento a botones de borrar comentario
+                    addEventToButtonDeleteComment();
                     if (resp.data.amountOfComments > 0) {
                         //Se actualiza contador de comentarios
                         document.getElementById(
@@ -59,6 +62,10 @@ const handlerShowComment = (e) => {
                         let container = document.getElementById(
                             `container-comments-${postId}`
                         );
+                        //Se actualiza contador de comentarios
+                        document.getElementById(
+                            `amount-comments-post-${postId}`
+                        ).innerText = "";
                         container.insertAdjacentHTML(
                             "beforeend",
                             "<div class='text-center pb-4'> <p class='text-sm font-medium' >No comments</p></div>"
@@ -119,6 +126,8 @@ const handlerShowMoreComments = (e) => {
             if (resp.data.state) {
                 //Se inserta comentario en la lista de comentario
                 appendComments(resp.data, postId, false);
+                //Se añade evento a botones de borrar comentario
+                addEventToButtonDeleteComment();
                 //Se actualiza el numero de la proxima pagina a cargar
                 element.setAttribute("data-page", resp.data.nextPage);
                 //Si no hay mas comentarios para cargar
@@ -148,8 +157,47 @@ const appendComments = (data, postId, resetContent) => {
                 comment.name,
                 comment.profile_image,
                 comment.pivot.created_at_formated,
-                comment.pivot.content
+                comment.pivot.content,
+                comment.pivot.id,
+                comment.commentBelongsToCurrentUser
             )
         );
     });
+};
+
+/**
+ *
+ */
+const addEventToButtonDeleteComment = () => {
+    const buttonsDeleteComment = document.querySelectorAll(
+        ".button-delete-comment"
+    );
+    console.log(buttonsDeleteComment);
+    buttonsDeleteComment.forEach((button) => {
+        //Se elimina el evento del boton
+        button.removeEventListener("click", handlerButtonDeleteComment);
+        //Se añde el evento al boton
+        button.addEventListener("click", handlerButtonDeleteComment);
+    });
+};
+
+/**
+ *
+ */
+const handlerButtonDeleteComment = (e) => {
+    let element = e.currentTarget;
+    let commentId = element.getAttribute("data-id");
+    axios
+        .post(`/post/comment/delete`, { commentId: commentId })
+        .then((resp) => {
+            console.log(resp.data);
+            if (resp.data.state) {
+                //Se elimina comentario de la lista
+                let containerComment = document.getElementById(
+                    `comment-container-${commentId}`
+                );
+                containerComment.remove();
+            }
+        })
+        .catch((error) => {});
 };
