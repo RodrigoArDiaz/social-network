@@ -20,8 +20,10 @@ const handlerSubmitCommentForm = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     let postId = formData.get("post_id");
-    let spinner = document.getElementById(`comment-button-${postId}`);
+    let spinner = document.getElementById(`comment-button-spinner-${postId}`);
+    let iconButton = document.getElementById(`comment-button-${postId}`);
     spinner.classList.remove("hidden");
+    iconButton.classList.add("hidden");
     axios
         .post("/post/comment", formData, {
             headers: {
@@ -30,6 +32,7 @@ const handlerSubmitCommentForm = (e) => {
         })
         .then((res) => {
             spinner.classList.add("hidden");
+            iconButton.classList.remove("hidden");
             console.log(res.data);
             let data = res.data;
             if (data.state) {
@@ -118,8 +121,8 @@ const createComment = (
                             <div class="flex flex-row justify-between">
 
                                 <div class="flex">
-                                    <div class="flex md:hidden h-full justify-start flex-col">
-                                        <img class="w-8 h-8 rounded-full mx-auto object-cover"
+                                    <div class="flex min-w-[35px] md:hidden h-full justify-start flex-col">
+                                        <img class="w-7 h-7 md:w-8 md:h-8 rounded-full mx-auto object-cover"
                                             src="${profileImage}" alt=""
                                         >
                                     </div>
