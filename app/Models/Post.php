@@ -35,14 +35,14 @@ class Post extends Model
      * Relacion N a N entre tabla Posts y Tabla Users
      */
     public function comments(){
-        return $this->belongsToMany(User::class, 'comments')->withPivot('content')->withTimestamps();
+        return $this->belongsToMany(User::class, 'comments')->withPivot(['content', 'id'])->withTimestamps();
     }
 
     /**
      *  Relacion N a N entre tabla Posts y Tabla Users ordenada segun la fecha de creacion del comentario, en orden descendiente
      */
     public function commentsOrderByCreatedDateDesc(){
-        return $this->belongsToMany(User::class, 'comments')->withPivot('content')->withTimestamps()->orderByPivot('created_at','desc');
+        return $this->belongsToMany(User::class, 'comments')->withPivot(['content', 'id'])->withTimestamps()->orderByPivot('created_at','desc');
     }
 
     /**
@@ -50,7 +50,7 @@ class Post extends Model
      */
     public function commentsOrderByCreatedDateDescWithLimit($offset,$limit){
         return $this->belongsToMany(User::class, 'comments')
-                    ->withPivot('content')
+                    ->withPivot(['content', 'id'])
                     ->withTimestamps()
                     ->orderByPivot('created_at','desc')
                     ->offset($offset)
