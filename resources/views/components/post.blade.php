@@ -205,9 +205,9 @@
                     </div>
 
                     {{-- Show more comments  --}}
-                    <div class="pb-4 hidden" id="container-action-more-results-{{$post->id}}">
+                    <div class="show-more-comments pb-4 hidden" id="container-action-more-results-{{$post->id}}" data-id="{{$post->id}}" data-page='2'>
                         <div class="text-center">
-                            <a href="javascript:void(0)" id="action-more-results" class="flex justify-center font-medium text-sm align-middle text-indigo-500">
+                            <a href="javascript:void(0)" id="action-more-results-{{$post->id}}" class="flex justify-center font-medium text-sm align-middle text-indigo-500">
                                 Show more comments
                             </a>
                         </div>
