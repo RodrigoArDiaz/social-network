@@ -68,6 +68,7 @@ Route::post('connect/search-more', [ConnectsController::class, 'searchMoreResult
  * Likes
  */
 Route::get('post/{post_id}/toggle-like', [LikesController::class, 'store'])->name('post.like.store');
+Route::get('post/{post_id}/list-likes', [LikesController::class, 'list'])->name('post.like.list');
 
 /**
  * Comments

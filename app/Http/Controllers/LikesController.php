@@ -6,6 +6,8 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function Pest\Laravel\get;
+
 class LikesController extends Controller
 {
 
@@ -40,6 +42,32 @@ class LikesController extends Controller
             'message' => $message,
             'like' => $like,
             'number_like' => ($post->likes()->count() == 0) ? '' : $post->likes()->count()
+        ],200);
+    }
+
+    /**
+     * Permite listar los usuarios que dieron like a un post
+     */
+    public function list($post_id)
+    {
+        $post = Post::find($post_id);
+
+        if (!$post) {
+            return response()->json([
+                'state' => false,
+                'message' => 'Operation fail. Post does not exist.',
+                'users' => []
+            ],200);
+        }
+
+        return response()->json([
+            'state' => true,
+            'message' => 'Operation succesfull',
+            'users' => $post->likes()->get( )->each(function($user){
+                //Cargo la url del perfil de cada usuario
+                $user['route_posts']  = route('posts',$user->id);
+                return $user;
+            }),
         ],200);
     }
 

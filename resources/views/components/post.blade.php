@@ -162,15 +162,26 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                                 </svg>
                             </x-buttons.icon-button-secondary>
-                            <p class="text-base text-gray-700 font-semibold">
-                                @php
-                                    $numberOfLikes = '';
-                                    if ($post->likes_count != 0) {
-                                        $numberOfLikes = $post->likes_count;
-                                    }
-                                @endphp
-                                {{$numberOfLikes}}
-                            </p>
+                            {{-- Ver likes --}}
+                            <button class="show-likes-list border-opacity-0 shadow-none flex bg-transparent
+                                p-2 border rounded-full z-50  right-3 top-2  active:text-gray-500
+                                items-center   dark:bg-gray-800  border-gray-300 dark:border-gray-500  font-semibold
+                                text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest  hover:bg-gray-50
+                                dark:hover:bg-gray-700 active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2
+                                dark:active:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150"
+                                x-data=""
+                                x-on:click.prevent="$dispatch('open-modal', 'list-likes')"
+                                data-id="{{$post->id}}">
+                                <p class="show-likes-user text-base text-gray-700 font-medium w-6 h-6" id="amount-likes-post-{{$post->id}}">
+                                    @php
+                                        $numberOfLikes = '';
+                                        if ($post->likes_count != 0) {
+                                            $numberOfLikes = $post->likes_count;
+                                        }
+                                    @endphp
+                                    {{$numberOfLikes}}
+                                </p>
+                            </button>
                         </div>
 
 
@@ -182,7 +193,7 @@
                                 </svg>
 
                             </x-buttons.icon-button-secondary>
-                            <p class="text-base text-gray-700 font-medium" id="amount-comments-post-{{$post->id}}">
+                            <p class="text-base text-gray-700 font-medium px-4" id="amount-comments-post-{{$post->id}}">
                                 @if ($post->comments_count > 0)
                                     {{$post->comments_count}}
                                 @endif
@@ -191,7 +202,7 @@
                     </div>
 
                     {{-- Comments list --}}
-                    <div id="container-comments-{{$post->id}}"  class="bg-white overflow-hidden transition-all duration-500 max-h-0 border-none border-transparent  peer-checked:border peer-checked:border-gray-900 pb-2">
+                    <div id="container-comments-{{$post->id}}"  class="bg-white overflow-hidden transition-all duration-500 max-h-0 border-none border-transparent  peer-checked:border peer-checked:border-gray-900">
                         {{-- Aqui van los comentarios --}}
                     </div>
 
@@ -216,3 +227,7 @@
         </div>
     </div>
 </div>
+
+
+
+

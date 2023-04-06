@@ -61,6 +61,22 @@ class DatabaseSeeder extends Seeder
 
 
         //Crea n usuarios, cada usuario sigue a una cantidad aleatoria de otros usuarios y se crean una cantidad aleatoria de cada post
+        // $userToCreate = 100;
+        // \App\Models\User::factory($userToCreate)->create()->each(function($user){ //Nota se crea primero los n usuarios y se devuelve una coleccion con create. Despues se recorre con each esa coleccion de n usuario
+        //     $numbersOfUser = User::all()->count();
+
+        //     //Selecciona usuarios aleatorios para seguir
+        //     $numbersOfUserToFollow = rand(0,$numbersOfUser);
+        //     $usersToFollow = User::inRandomOrder()->where('id', '!=', $user->id)->limit($numbersOfUserToFollow)->get();
+        //     foreach ($usersToFollow as $userToFollow) {
+        //         $user->followingTo()->attach($userToFollow->id);
+        //     }
+
+        //     //Crea posts aleatorio para el usuario
+        //     $numberOfPosts = rand(0,10);
+        //     Post::factory()->count($numberOfPosts)->for($user)->create();
+        // });
+
         $userToCreate = 100;
         \App\Models\User::factory($userToCreate)->create()->each(function($user){ //Nota se crea primero los n usuarios y se devuelve una coleccion con create. Despues se recorre con each esa coleccion de n usuario
             $numbersOfUser = User::all()->count();
@@ -75,6 +91,22 @@ class DatabaseSeeder extends Seeder
             //Crea posts aleatorio para el usuario
             $numberOfPosts = rand(0,10);
             Post::factory()->count($numberOfPosts)->for($user)->create();
+
+            //Crea likes a post
+            $numberOfPost = Post::all()->count();
+            $numbersOfPostToLike = rand(0,$numberOfPost);
+            $postToLike = Post::inRandomOrder()->limit($numbersOfPostToLike)->get();
+            foreach ($postToLike as $post) {
+                $post->likes()->attach($user->id);
+            }
+
+            //Crea comment a posts
+            $numberOfPostToComment = rand(0,$numberOfPost);
+            $postToComment = Post::inRandomOrder()->limit($numberOfPostToComment)->get();
+            foreach ($postToComment as $post) {
+                $post->comments()->attach($user->id,['content' =>  fake()->realText($maxNbChars = 99, $indexSize = 2)]);
+            }
+
         });
 
 
