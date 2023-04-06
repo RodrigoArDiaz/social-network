@@ -63,7 +63,11 @@ class LikesController extends Controller
         return response()->json([
             'state' => true,
             'message' => 'Operation succesfull',
-            'users' => $post->likes()->get( )
+            'users' => $post->likes()->get( )->each(function($user){
+                //Cargo la url del perfil de cada usuario
+                $user['route_posts']  = route('posts',$user->id);
+                return $user;
+            }),
         ],200);
     }
 

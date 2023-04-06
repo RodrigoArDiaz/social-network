@@ -193,7 +193,7 @@
                                 </svg>
 
                             </x-buttons.icon-button-secondary>
-                            <p class="text-base text-gray-700 font-medium px-2" id="amount-comments-post-{{$post->id}}">
+                            <p class="text-base text-gray-700 font-medium px-4" id="amount-comments-post-{{$post->id}}">
                                 @if ($post->comments_count > 0)
                                     {{$post->comments_count}}
                                 @endif
@@ -202,7 +202,7 @@
                     </div>
 
                     {{-- Comments list --}}
-                    <div id="container-comments-{{$post->id}}"  class="bg-white overflow-hidden transition-all duration-500 max-h-0 border-none border-transparent  peer-checked:border peer-checked:border-gray-900 pb-2">
+                    <div id="container-comments-{{$post->id}}"  class="bg-white overflow-hidden transition-all duration-500 max-h-0 border-none border-transparent  peer-checked:border peer-checked:border-gray-900">
                         {{-- Aqui van los comentarios --}}
                     </div>
 

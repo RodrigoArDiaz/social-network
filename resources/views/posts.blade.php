@@ -222,7 +222,7 @@
 
      {{-- Modal like --}}
     <x-modal name="list-likes" focusable>
-        <div class="p-6">
+        <div class="p-4 md:p-6">
             <div class="flex ">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                     {{ __('Likes') }}
@@ -243,7 +243,7 @@
 
 
 
-            <div class="mt-6 flex justify-end">
+            <div class="mt-2 flex justify-end">
                 <x-secondary-button x-on:click="$dispatch('close')">
                     {{ __('Back') }}
                 </x-secondary-button>

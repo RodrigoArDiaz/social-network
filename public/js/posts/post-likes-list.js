@@ -29,6 +29,7 @@ const handlerShowLikesListButton = (e) => {
     axios
         .get(`/post/${postId}/list-likes`)
         .then((res) => {
+            console.log(res.data);
             //Se esconde spinner
             spinnerModal.classList.add("hidden");
             if (res.data.state) {
@@ -62,7 +63,7 @@ const createUserCardLike = (user) => {
     return ` <div class="flex flex-row justify-between">
                 <div class="flex">
                     <div class="flex min-w-[35px] h-full justify-start flex-col">
-                        <img class="w-7 h-7 md:w-8 md:h-8 rounded-full mx-auto object-cover"
+                        <img class="w-6 h-6 md:w-8 md:h-8 rounded-full mx-auto object-cover"
                             src="${user.profile_image}" alt=""
                         >
                     </div>
@@ -71,7 +72,9 @@ const createUserCardLike = (user) => {
                     </div>
                 </div>
                 <div>
-                    Ver posts
+                    <a href="${user.route_posts}" class="flex justify-center font-medium text-sm md:text-base align-middle text-indigo-500">
+                        View posts
+                    </a>
                 </div>
             </div>`;
 };
