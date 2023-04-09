@@ -10,6 +10,7 @@ const searchMoreResults = () => {
         axios
             .get(`/post/${userId}/connections/${page}`)
             .then((resp) => {
+                console.log(resp.data);
                 if (resp.data.state) {
                     if (resp.data.users.length != 0) {
                         insertResults(resp.data);
