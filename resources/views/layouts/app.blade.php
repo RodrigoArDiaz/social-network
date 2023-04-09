@@ -57,5 +57,25 @@
             <script src="/js/connect/connect-search-more-results.js"></script>
         @endif
 
+        @if (request()->routeIs('connect') || request()->routeIs('search') )
+            <script src="/js/connect/connect-follow.js"></script>
+            <script src="/js/connect/connect-search-more-results.js"></script>
+        @endif
+
+        @if (request()->routeIs('posts.connections') || request()->routeIs('posts.followers') || request()->routeIs('posts.following'))
+            <script src="/js/connections/index.js"></script>
+        @endif
+
+        @if ( request()->routeIs('posts.followers'))
+            <script src="/js/connections/followers-pagination.js"></script>
+        @endif
+
+        @if ( request()->routeIs('posts.following'))
+            <script src="/js/connections/following-pagination.js"></script>
+        @endif
+
+        @if ( request()->routeIs('posts.connections'))
+            <script src="/js/connections/connections-pagination.js"></script>
+        @endif
     </body>
 </html>

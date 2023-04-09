@@ -56,7 +56,7 @@ Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edi
 Route::patch('/post/{post}',[PostController::class, 'update'])->name('post.update');
 
 /**
- * Connects
+ * Connect
  */
 Route::get('connect', [ConnectsController::class, 'index'])->name('connect');
 Route::post('connect/search', [ConnectsController::class, 'search'])->name('search');
@@ -77,3 +77,12 @@ Route::post('post/comment', [CommentsController::class, 'store'])->name('post.co
 Route::post('post/comment/list', [CommentsController::class, 'list'])->name('post.comment.list');
 Route::post('post/comment/list-more', [CommentsController::class, 'listMore'])->name('post.comment.list-more');
 Route::post('post/comment/delete', [CommentsController::class, 'destroy'])->name('post.comment.delete');
+/**
+ * Connections
+ */
+Route::get('post/{user_id}/connections', [ConnectsController::class, 'connections'])->name('posts.connections');
+Route::get('post/{user_id}/connections/{page_number}', [ConnectsController::class, 'connectionsMoreResults'])->name('posts.connections.page');
+Route::get('post/{user_id}/followers', [ConnectsController::class, 'followers'])->name('posts.followers');
+Route::get('post/{user_id}/followers/{page_number}', [ConnectsController::class, 'followersMoreResults'])->name('posts.followers.page');
+Route::get('post/{user_id}/following', [ConnectsController::class, 'following'])->name('posts.following');
+Route::get('post/{user_id}/following/{page_number}', [ConnectsController::class, 'followingMoreResults'])->name('posts.following.page');
