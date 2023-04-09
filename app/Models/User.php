@@ -84,4 +84,29 @@ class User extends Authenticatable
     public function comments(){
         return $this->belongsToMany(Post::class, 'comments')->withPivot(['content', 'id'])->withTimestamps();
     }
+
+    /**
+     * Auto relacion N a N , usuarios que siguen al usuario ordenado por name y con paginacion
+     */
+    public function followersOrderByNameAscWithLimit($offset, $limit)
+    {
+        return $this->belongsToMany(User::class,'followers', 'user_id_receive', 'user_id_send')
+                    ->withTimestamps()
+                    ->orderBy('users.name','asc')
+                    ->offset($offset)
+                    ->limit($limit);
+
+    }
+
+    /**
+     *  Auto relacion N a N , usuarios que el usuario sigue, ordenados por name y con paginacion
+     */
+    public function followingToOrderByNameAscWithLimit($offset,$limit)
+    {
+        return $this->belongsToMany(User::class,'followers', 'user_id_send', 'user_id_receive')
+                    ->withTimestamps()
+                    ->orderBy('users.name','asc')
+                    ->offset($offset)
+                    ->limit($limit);
+    }
 }

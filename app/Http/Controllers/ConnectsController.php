@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class ConnectsController extends Controller
 {
     private $offset = 0;
-    private $limit = 10;
+    private $limit = 20;
     /**
      * Display a listing of the resource.
      *
@@ -124,6 +124,248 @@ class ConnectsController extends Controller
            ],200);
        }
     }
+
+    /***
+     * Retorna las conexiones del usuario
+     */
+    public function connections($user_id)
+    {
+        $user = User::find($user_id);
+        //Se obtiene el numero de followers, followings y connects
+        $numberOfFollowers = $user->followers()->count();
+        $numberOfFollowing = $user->followingTo()->count();
+        $numberOfPosts = $user->posts()->count();
+
+        $numberOfConnections = 0;
+        //Se cuenta la cantidad de seguidos que tambien siguen al usuario
+        $numberOfConnections = $user->followingTo()->whereIn('user_id_receive',function($query) use ($user){
+                                                                                    $query->select('user_id_send')
+                                                                                            ->from('followers')
+                                                                                            ->where('user_id_receive','=', $user->id);
+                                                                                }
+                                                                                )->count();
+
+        $connections = $user->followingTo()
+                            ->whereIn('user_id_receive',function($query) use ($user){
+                                                                            $query->select('user_id_send')
+                                                                                    ->from('followers')
+                                                                                    ->where('user_id_receive','=', $user->id);
+                                                                        })
+                            ->orderBy('users.name','asc')
+                            ->offset(0)
+                            ->limit($this->limit)
+                            ->get();
+
+
+        return view('connections', ['user' => $user,
+                                    // 'isFollowing' => $isFollowing,
+                                    // 'isFollower' => $isFollower,
+                                    'numberOfFollowers' => $numberOfFollowers,
+                                    'numberOfFollowing' => $numberOfFollowing,
+                                    'numberOfConnections' => $numberOfConnections,
+                                    'numberOfPosts' => $numberOfPosts,
+                                    'users' => $connections
+                                ]);
+    }
+
+
+     /***
+     * Retorna las conexiones del usuario
+     */
+    public function connectionsMoreResults($user_id, $page_number)
+    {
+        $user = User::find($user_id);
+        //Se obtiene el numero de followers, followings y connects
+        $numberOfFollowers = $user->followers()->count();
+        $numberOfFollowing = $user->followingTo()->count();
+        $numberOfPosts = $user->posts()->count();
+
+        $numberOfConnections = 0;
+        //Se cuenta la cantidad de seguidos que tambien siguen al usuario
+        $numberOfConnections = $user->followingTo()->whereIn('user_id_receive',function($query) use ($user){
+                                                                                    $query->select('user_id_send')
+                                                                                            ->from('followers')
+                                                                                            ->where('user_id_receive','=', $user->id);
+                                                                                }
+                                                                                )->count();
+
+        $connections = $user->followingTo()
+                            ->whereIn('user_id_receive',function($query) use ($user){
+                                                                            $query->select('user_id_send')
+                                                                                    ->from('followers')
+                                                                                    ->where('user_id_receive','=', $user->id);
+                                                                        })
+                            ->orderBy('users.name','asc')
+                            ->offset(($page_number - 1)*$this->limit)
+                            ->limit($this->limit)
+                            ->get();
+
+
+        return response()->json([
+                                'state' => true,
+                                'user' => $user,
+                                'numberOfFollowers' => $numberOfFollowers,
+                                'numberOfFollowing' => $numberOfFollowing,
+                                'numberOfConnections' => $numberOfConnections,
+                                'numberOfPosts' => $numberOfPosts,
+                                'users' => $connections,
+                                'type' => 'connections',
+                                'isUserPost' => $user_id == auth()->user()->id,
+                                'id_recibido' => $user_id,
+                                'id_auth' =>  auth()->user()->id,
+                            ],200);
+    }
+
+
+
+    /***
+     * Retorna los seguidores del usuario
+     */
+    public function followers($user_id)
+    {
+
+        $user = User::find($user_id);
+        //Se obtiene el numero de followers, followings y connects
+        $numberOfFollowers = $user->followers()->count();
+        $numberOfFollowing = $user->followingTo()->count();
+        $numberOfPosts = $user->posts()->count();
+
+        $numberOfConnections = 0;
+            //Se cuenta la cantidad de seguidos que tambien siguen al usuario
+        $numberOfConnections = $user->followingTo()->whereIn('user_id_receive',function($query) use ($user){
+                                                                                    $query->select('user_id_send')
+                                                                                            ->from('followers')
+                                                                                            ->where('user_id_receive','=', $user->id);
+                                                                                }
+                                                                        )->count();
+
+        //
+        $followers = $user->followersOrderByNameAscWithLimit(0,$this->limit)
+                          ->get()
+                          ->each(function($follower) use ($user){
+                               $follower['following'] = $user->followingTo()->get()->contains($follower->id);
+                          });
+        return view('connections', ['user' => $user,
+                                    // 'isFollowing' => $isFollowing,
+                                    // 'isFollower' => $isFollower,
+                                    'numberOfFollowers' => $numberOfFollowers,
+                                    'numberOfFollowing' => $numberOfFollowing,
+                                    'numberOfConnections' => $numberOfConnections,
+                                    'numberOfPosts' => $numberOfPosts,
+                                    'users' => $followers,
+
+                                ]);
+    }
+
+     /***
+     * Retorna los seguidores del usuario
+     */
+    public function followersMoreResults($user_id, $page_number)
+    {
+        $user = User::find($user_id);
+        //Se obtiene el numero de followers, followings y connects
+        $numberOfFollowers = $user->followers()->count();
+        $numberOfFollowing = $user->followingTo()->count();
+        $numberOfPosts = $user->posts()->count();
+
+        $numberOfConnections = 0;
+            //Se cuenta la cantidad de seguidos que tambien siguen al usuario
+        $numberOfConnections = $user->followingTo()->whereIn('user_id_receive',function($query) use ($user){
+                                                                                    $query->select('user_id_send')
+                                                                                            ->from('followers')
+                                                                                            ->where('user_id_receive','=', $user->id);
+                                                                                }
+                                                                        )->count();
+
+        //
+        $followers = $user->followersOrderByNameAscWithLimit(($page_number - 1)*$this->limit,$this->limit)
+                          ->get()
+                          ->each(function($follower) use ($user){
+                               $follower['following'] = $user->followingTo()->get()->contains($follower->id);
+                          });
+
+        return response()->json([
+                          'state' => true,
+                          'user' => $user,
+                          // 'isFollowing' => $isFollowing,
+                          // 'isFollower' => $isFollower,
+                          'numberOfFollowers' => $numberOfFollowers,
+                          'numberOfFollowing' => $numberOfFollowing,
+                          'numberOfConnections' => $numberOfConnections,
+                          'numberOfPosts' => $numberOfPosts,
+                          'users' => $followers,
+                          'type' => 'followers',
+                          'isUserPost' => $user_id == auth()->user()->id
+                      ],200);
+
+    }
+
+    /***
+     * Retorna los usuario que se estan siguiendo del usuario
+     */
+    public function following($user_id)
+    {
+        $user = User::find($user_id);
+        //Se obtiene el numero de followers, followings y connects
+        $numberOfFollowers = $user->followers()->count();
+        $numberOfFollowing = $user->followingTo()->count();
+        $numberOfPosts = $user->posts()->count();
+
+        $numberOfConnections = 0;
+            //Se cuenta la cantidad de seguidos que tambien siguen al usuario
+        $numberOfConnections = $user->followingTo()->whereIn('user_id_receive',function($query) use ($user){
+                                                                                    $query->select('user_id_send')
+                                                                                            ->from('followers')
+                                                                                            ->where('user_id_receive','=', $user->id);
+                                                                                }
+                                                                        )->count();
+
+        $following = $user->followingToOrderByNameAscWithLimit(0,$this->limit)->get();
+        return view('connections', ['user' => $user,
+                                    // 'isFollowing' => $isFollowing,
+                                    // 'isFollower' => $isFollower,
+                                    'numberOfFollowers' => $numberOfFollowers,
+                                    'numberOfFollowing' => $numberOfFollowing,
+                                    'numberOfConnections' => $numberOfConnections,
+                                    'numberOfPosts' => $numberOfPosts,
+                                    'users' => $following,
+
+                                ]);
+    }
+
+
+    public function followingMoreResults($user_id, $page_number)
+    {
+        $user = User::find($user_id);
+        //Se obtiene el numero de followers, followings y connects
+        $numberOfFollowers = $user->followers()->count();
+        $numberOfFollowing = $user->followingTo()->count();
+        $numberOfPosts = $user->posts()->count();
+
+        $numberOfConnections = 0;
+            //Se cuenta la cantidad de seguidos que tambien siguen al usuario
+        $numberOfConnections = $user->followingTo()->whereIn('user_id_receive',function($query) use ($user){
+                                                                                    $query->select('user_id_send')
+                                                                                            ->from('followers')
+                                                                                            ->where('user_id_receive','=', $user->id);
+                                                                                }
+                                                                        )->count();
+
+        $following = $user->followingToOrderByNameAscWithLimit(($page_number - 1)*$this->limit,$this->limit)->get();
+
+                                return response()->json([
+                                    'state' => true,
+                                    'user' => $user,
+                                    'numberOfFollowers' => $numberOfFollowers,
+                                    'numberOfFollowing' => $numberOfFollowing,
+                                    'numberOfConnections' => $numberOfConnections,
+                                    'numberOfPosts' => $numberOfPosts,
+                                    'users' => $following,
+                                    'type' => 'following',
+                                    'isUserPost' => $user_id == auth()->user()->id
+                                ],200);
+    }
+
 
 
 
