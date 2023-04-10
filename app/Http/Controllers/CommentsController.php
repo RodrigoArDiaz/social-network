@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -32,6 +33,18 @@ class CommentsController extends Controller
                     'state' => false,
                     'message' => 'Operation fail. Comment\'s lenght is more than 100 characters!.',
                 ],200);
+            }
+
+            if (auth()->user()->id != $post->user_id) {
+                $userOwner = User::find($post->user_id);
+                if ($userOwner) {
+                    if (!$userOwner->followers()->get()->contains(auth()->user()->id)) {
+                        return response()->json([
+                            'state' => false,
+                            'message' => 'Operation fail. User is not follower of author of post',
+                        ],200);
+                    }
+                }
             }
 
             //Se guarda el comenteario

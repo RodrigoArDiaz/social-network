@@ -182,7 +182,7 @@
                 @if (count($posts) != 0)
                     <div class="flex flex-col space-y-6">
                         @foreach ($posts as $post )
-                            <x-post :user="$user" :post="$post" :isUserPost="$isUserPost"/>
+                            <x-post :user="$user" :post="$post" :isUserPost="$isUserPost" :isFollowing="$isFollowing"/>
                         @endforeach
                     </div>
                 @else
