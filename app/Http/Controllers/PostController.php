@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -263,7 +264,17 @@ class PostController extends Controller
         if($user_id !== auth()->user()->id){
             return 'Error';
         }
-        // Comment::where('post_id', $post->id)->delete();
+
+        //Eliminacion de likes del post
+        if ($post->likes()->get()->count() != 0) {
+            DB::table('likes')->where('post_id', $post->id)->delete();
+        }
+
+        //Eliminacion de comentarios del post
+        if ($post->comments()->get()->count() != 0) {
+            DB::table('comments')->where('post_id', $post->id)->delete();
+        }
+
         //Elimino  foto del post
         $array = explode('/',$post->image);
         $name_old = $array[array_key_last($array)];
