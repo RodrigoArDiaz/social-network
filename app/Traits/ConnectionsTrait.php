@@ -85,5 +85,32 @@ trait ConnectionsTrait {
     }
 
 
+    /****************************************************
+     * Retorna el numero de seguidores, el numero de conecciones y el numero de siguiendo
+     * de un usuario dado por el id
+     */
+    public function userInformationLastConnections($user_id) {
+        $user = User::find($user_id);
+        //Se obtiene el numero de followers, followings y connects
+        $lastFollowers = $user->followersOrderByCreatedAtDescWithLimit(0,3)->get();
+        $lastFollowing = $user->followingToOrderByCreatedAtDesWithLimit(0,3)->get();
+        $lastConnections = $user->followingTo()->whereIn('user_id_receive',function($query) use ($user){
+                                    $query->select('user_id_send')
+                                            ->from('followers')
+                                            ->where('user_id_receive','=', $user->id);
+                                }
+                                )
+                                ->orderByPivot('created_at', 'desc')
+                                ->offset(0)
+                                ->limit(3)
+                                ->get();
+
+        return ['lastFollowers' => $lastFollowers,
+                'lastFollowing' => $lastFollowing,
+                'lastConnections' => $lastConnections];
+
+    }
+
+
 
 }

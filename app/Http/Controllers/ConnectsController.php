@@ -148,6 +148,7 @@ class ConnectsController extends Controller
 
         //Uso de la funcion del trait
         $userInformationConnections  = $this->userInformationConnections($user_id);
+        $lastConnections = $this->userInformationLastConnections($user_id);
 
         //Recuperacion de pagina 1 de lista de conexiones
         $connections = $this->getConnectionWithPagination($user,1, $this->limit);
@@ -160,7 +161,10 @@ class ConnectsController extends Controller
                                     'numberOfFollowing' => $userInformationConnections['numberOfFollowing'],
                                     'numberOfConnections' => $userInformationConnections['numberOfConnections'],
                                     'numberOfPosts' => $userInformationConnections['numberOfPosts'],
-                                    'users' => $connections
+                                    'users' => $connections,
+                                    'lastFollowers' => $lastConnections['lastFollowers'],
+                                    'lastFollowing' => $lastConnections['lastFollowing'],
+                                    'lastConnections' => $lastConnections['lastConnections'],
                                 ]);
     }
 
@@ -220,6 +224,7 @@ class ConnectsController extends Controller
 
         //Uso de la funcion del trait
         $userInformationConnections  = $this->userInformationConnections($user_id);
+        $lastConnections = $this->userInformationLastConnections($user_id);
 
         //Recuperacion de pagina 1 de lista de seguidore
         $followers = $this->getFollowersWithPagination($user,1, $this->limit);
@@ -230,7 +235,9 @@ class ConnectsController extends Controller
                                     'numberOfConnections' => $userInformationConnections['numberOfConnections'],
                                     'numberOfPosts' => $userInformationConnections['numberOfPosts'],
                                     'users' => $followers,
-
+                                    'lastFollowers' => $lastConnections['lastFollowers'],
+                                    'lastFollowing' => $lastConnections['lastFollowing'],
+                                    'lastConnections' => $lastConnections['lastConnections'],
                                 ]);
     }
 
@@ -288,9 +295,11 @@ class ConnectsController extends Controller
 
         //Uso de la funcion del trait
         $userInformationConnections  = $this->userInformationConnections($user_id);
+        $lastConnections = $this->userInformationLastConnections($user_id);
 
         //Recuperacion de pagina 1 de lista de usuarios seguidos
         $following = $this->getFollowingWithPagination($user, 1, $this->limit);
+
 
         //Retorno json
         return view('connections', ['user' => $user,
@@ -299,6 +308,9 @@ class ConnectsController extends Controller
                                     'numberOfConnections' => $userInformationConnections['numberOfConnections'],
                                     'numberOfPosts' => $userInformationConnections['numberOfPosts'],
                                     'users' => $following,
+                                    'lastFollowers' => $lastConnections['lastFollowers'],
+                                    'lastFollowing' => $lastConnections['lastFollowing'],
+                                    'lastConnections' => $lastConnections['lastConnections'],
                                 ]);
     }
 
