@@ -109,4 +109,30 @@ class User extends Authenticatable
                     ->offset($offset)
                     ->limit($limit);
     }
+
+
+    /**
+     *  Auto relacion N a N , usuarios que el usuario sigue, ordenados por created_ad y con limite
+     */
+    public function followersOrderByCreatedAtDescWithLimit($offset, $limit)
+    {
+        return $this->belongsToMany(User::class,'followers', 'user_id_receive', 'user_id_send')
+                    ->withTimestamps()
+                    ->orderByPivot('created_at','desc')
+                    ->offset($offset)
+                    ->limit($limit);
+    }
+
+    /**
+     *  Auto relacion N a N , usuarios que el usuario sigue, ordenados por created_ad y con paginacion
+     */
+    public function followingToOrderByCreatedAtDesWithLimit($offset,$limit)
+    {
+        return $this->belongsToMany(User::class,'followers', 'user_id_send', 'user_id_receive')
+                    ->withTimestamps()
+                    ->orderByPivot('created_at','desc')
+                    ->offset($offset)
+                    ->limit($limit);
+    }
+
 }

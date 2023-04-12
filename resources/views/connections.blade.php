@@ -104,7 +104,7 @@
 
         {{-- Right section --}}
         <x-containers.right-section>
-                {{-- Content --}}
+            @include('connections.last-connections-followers-following')
         </x-containers.right-section>
     </x-containers.main-container>
 
