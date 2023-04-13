@@ -5,6 +5,7 @@ use App\Http\Controllers\ConnectsController;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TimelineController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -25,9 +26,9 @@ Route::get('/', function () {
 
 });
 
-Route::get('/timeline', function () {
-    return view('timeline');
-})->middleware(['auth', 'verified'])->name('timeline');
+// Route::get('/timeline', function () {
+//     return view('timeline');
+// })->middleware(['auth', 'verified'])->name('timeline');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -86,3 +87,7 @@ Route::get('post/{user_id}/followers', [ConnectsController::class, 'followers'])
 Route::get('post/{user_id}/followers/{page_number}', [ConnectsController::class, 'followersMoreResults'])->name('posts.followers.page');
 Route::get('post/{user_id}/following', [ConnectsController::class, 'following'])->name('posts.following');
 Route::get('post/{user_id}/following/{page_number}', [ConnectsController::class, 'followingMoreResults'])->name('posts.following.page');
+/**
+ * Timeline
+ */
+Route::get('timeline/', [TimelineController::class, 'index'])->name('timeline');

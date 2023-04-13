@@ -2,6 +2,8 @@
     <x-slot name="header">
     </x-slot>
 
+
+
     <x-containers.main-container>
         {{-- Left section --}}
         <x-containers.left-section>

@@ -21,7 +21,7 @@ const handlerClickButtonLike = (e) => {
         `amount-likes-post-${postId}`
     );
     axios
-        .get(`${postId}/toggle-like`)
+        .get(`/post/${postId}/toggle-like`)
         .then((res) => {
             console.log(res.data);
             if (res.data.like) {

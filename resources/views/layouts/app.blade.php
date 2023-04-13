@@ -77,5 +77,11 @@
         @if ( request()->routeIs('posts.connections'))
             <script src="/js/connections/connections-pagination.js"></script>
         @endif
+        @if (request()->routeIs('timeline'))
+            <script src="/js/posts/post-like.js"></script>
+            <script src="/js/posts/comment.js"></script>
+            <script src="/js/posts/comment-list.js"></script>
+            <script src="/js/posts/post-likes-list.js"></script>
+        @endif
     </body>
 </html>

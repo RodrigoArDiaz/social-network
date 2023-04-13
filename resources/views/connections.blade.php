@@ -2,6 +2,10 @@
     <x-slot name="header">
     </x-slot>
 
+    @php
+        $isUserPost = ($user->id == Auth::user()->id) ? true : false;
+    @endphp
+
     <x-containers.main-container>
         {{-- Left section --}}
         <x-containers.left-section>
