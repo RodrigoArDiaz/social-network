@@ -15,11 +15,16 @@
 
                     {{-- Date create post --}}
                     <div class="ml-4 flex-auto">
-                        <div class="font-semibold ">{{$user->name}}</div>
+                        <div class="font-semibold ">
+                            <a href="{{route('posts',$user->id)}}">
+                                {{$user->name}}
+                            </a>
+                        </div>
                         <div class="mt-1 text-slate-700">
                             <i>Post</i> : {{  $post->created_at->toDayDateTimeString()}}
                             @if (! $post->created_at->eq($post->updated_at ))
-                               -  <i class="text-green-500">Edit</i> : {{$post->updated_at->toDayDateTimeString()}}
+                               -  <i class="text-green-500">Edit</i> :
+                               {{str_replace('before', 'ago', $post->updated_at->diffForHumans(\Carbon\Carbon::now()))}}
                             @endif
 
                         </div>
@@ -167,11 +172,11 @@
                             </x-buttons.icon-button-secondary>
                             {{-- Ver likes --}}
                             <button class="show-likes-list border-opacity-0 shadow-none flex bg-transparent
-                                p-2 border rounded-full z-50  right-3 top-2  active:text-gray-500
-                                items-center   dark:bg-gray-800  border-gray-300 dark:border-gray-500  font-semibold
+                                p-2 border rounded-full right-3 top-2  active:text-gray-500
+                                items-center dark:bg-gray-800  border-gray-300 dark:border-gray-500  font-semibold
                                 text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest  hover:bg-gray-50
                                 dark:hover:bg-gray-700 active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2
-                                dark:active:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150"
+                                dark:active:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150 z-10"
                                 x-data=""
                                 x-on:click.prevent="$dispatch('open-modal', 'list-likes')"
                                 data-id="{{$post->id}}">

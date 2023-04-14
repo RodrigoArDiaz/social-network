@@ -1,27 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        @if (request()->routeIs('posts.connections'))
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Connections') }}
-            </h2>
-        @endif
-
-        @if (request()->routeIs('posts.followers'))
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Followers') }}
-            </h2>
-        @endif
-
-        @if (request()->routeIs('posts.following'))
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Following') }}
-            </h2>
-        @endif
-
-        @php
-            $isUserPost = ($user->id == Auth::user()->id) ? true : false;
-        @endphp
     </x-slot>
+
+    @php
+        $isUserPost = ($user->id == Auth::user()->id) ? true : false;
+    @endphp
 
     <x-containers.main-container>
         {{-- Left section --}}
