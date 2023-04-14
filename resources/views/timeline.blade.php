@@ -12,10 +12,9 @@
             {{-- Post --}}
             {{-- {{$posts}} --}}
             {{-- Post --}}
-
             @if (isset($posts))
                 @if (count($posts) != 0)
-                    <div class="flex flex-col space-y-6">
+                    <div class="flex flex-col space-y-6" id="container-posts-timeline">
                         @foreach ($posts as $post )
                             @php
                                 $user = $post->user;
@@ -54,14 +53,15 @@
             @else
                 <p>Error</p>
             @endif
+
         </x-containers.main-section>
         {{-- Right section --}}
         <x-containers.right-section>
         </x-containers.right-section>
     </x-containers.main-container>
 
-       {{-- Modal like --}}
-       <x-modal name="list-likes" focusable>
+    {{-- Modal like --}}
+    <x-modal name="list-likes" focusable>
         <div class="p-4 md:p-6">
             <div class="flex ">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">

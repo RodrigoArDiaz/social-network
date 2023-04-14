@@ -9,6 +9,7 @@ window.addEventListener("load", () => {
 const addEventToCommentForms = () => {
     let commentForms = document.querySelectorAll(".forms-comment");
     commentForms.forEach((form) => {
+        form.removeEventListener("submit", handlerSubmitCommentForm);
         form.addEventListener("submit", handlerSubmitCommentForm);
     });
 };

@@ -9,6 +9,9 @@ window.addEventListener("load", () => {
 const addEventToButtonLikePost = () => {
     buttonsLikePost = document.querySelectorAll("#button-like-post");
     buttonsLikePost.forEach((button) => {
+        //Se elimina event listener
+        button.removeEventListener("click", handlerClickButtonLike);
+        //Se añade event listener
         button.addEventListener("click", handlerClickButtonLike);
     });
 };

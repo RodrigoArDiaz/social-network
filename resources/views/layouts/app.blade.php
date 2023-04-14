@@ -82,6 +82,7 @@
             <script src="/js/posts/comment.js"></script>
             <script src="/js/posts/comment-list.js"></script>
             <script src="/js/posts/post-likes-list.js"></script>
+            <script src="/js/timeline/index.js"></script>
         @endif
     </body>
 </html>

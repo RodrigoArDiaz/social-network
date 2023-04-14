@@ -91,3 +91,4 @@ Route::get('post/{user_id}/following/{page_number}', [ConnectsController::class,
  * Timeline
  */
 Route::get('timeline/', [TimelineController::class, 'index'])->name('timeline');
+Route::get('timeline/{page_number}', [TimelineController::class, 'postsMoreResults'])->name('timeline.page');

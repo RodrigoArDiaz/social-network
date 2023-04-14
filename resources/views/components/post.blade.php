@@ -23,7 +23,8 @@
                         <div class="mt-1 text-slate-700">
                             <i>Post</i> : {{  $post->created_at->toDayDateTimeString()}}
                             @if (! $post->created_at->eq($post->updated_at ))
-                               -  <i class="text-green-500">Edit</i> : {{$post->updated_at->toDayDateTimeString()}}
+                               -  <i class="text-green-500">Edit</i> :
+                               {{str_replace('before', 'ago', $post->updated_at->diffForHumans(\Carbon\Carbon::now()))}}
                             @endif
 
                         </div>

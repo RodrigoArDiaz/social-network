@@ -10,6 +10,9 @@ const addEventToShowLikesListButton = () => {
     let buttonsShowLikesListButton =
         document.querySelectorAll(".show-likes-list");
     buttonsShowLikesListButton.forEach((button) => {
+        //Se elimina event listener
+        button.removeEventListener("click", handlerShowLikesListButton);
+        //Se añade event listener
         button.addEventListener("click", handlerShowLikesListButton);
     });
 };
