@@ -36,59 +36,65 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
-
 /****************************************************************************************
  *  Route web
  */
 
- /**
-  * Users
-  */
-Route::post('user/update_profile_image', [ProfileController::class, 'update_profile_image'])->name('user.update_profile_image');
+ Route::middleware('auth')->group(function () {
+    /**
+    * Users
+    */
 
-/**
- * Posts
- */
-Route::get('post/{user_id}', [PostController::class, 'index'])->name('posts');
-Route::post('post/', [PostController::class, 'store'])->name('post.store');
-Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.delete');
-Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
-Route::patch('/post/{post}',[PostController::class, 'update'])->name('post.update');
+    Route::post('user/update_profile_image', [ProfileController::class, 'update_profile_image'])->name('user.update_profile_image');
 
-/**
- * Connect
- */
-Route::get('connect', [ConnectsController::class, 'index'])->name('connect');
-Route::post('connect/search', [ConnectsController::class, 'search'])->name('search');
-Route::post('connect/follow', [ConnectsController::class, 'follow'])->name('follow');
-Route::post('connect/unfollow', [ConnectsController::class, 'unfollow'])->name('unfollow');
-Route::post('connect/search-more', [ConnectsController::class, 'searchMoreResults'])->name('search-more');
+    /**
+     * Posts
+     */
+    Route::get('post/{user_id}', [PostController::class, 'index'])->name('posts');
+    Route::post('post/', [PostController::class, 'store'])->name('post.store');
+    Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.delete');
+    Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
+    Route::patch('/post/{post}',[PostController::class, 'update'])->name('post.update');
 
-/**
- * Likes
- */
-Route::get('post/{post_id}/toggle-like', [LikesController::class, 'store'])->name('post.like.store');
-Route::get('post/{post_id}/list-likes', [LikesController::class, 'list'])->name('post.like.list');
+    /**
+     * Connect
+     */
+    Route::get('connect', [ConnectsController::class, 'index'])->name('connect');
+    Route::post('connect/search', [ConnectsController::class, 'search'])->name('search');
+    Route::post('connect/follow', [ConnectsController::class, 'follow'])->name('follow');
+    Route::post('connect/unfollow', [ConnectsController::class, 'unfollow'])->name('unfollow');
+    Route::post('connect/search-more', [ConnectsController::class, 'searchMoreResults'])->name('search-more');
 
-/**
- * Comments
- */
-Route::post('post/comment', [CommentsController::class, 'store'])->name('post.comment.store');
-Route::post('post/comment/list', [CommentsController::class, 'list'])->name('post.comment.list');
-Route::post('post/comment/list-more', [CommentsController::class, 'listMore'])->name('post.comment.list-more');
-Route::post('post/comment/delete', [CommentsController::class, 'destroy'])->name('post.comment.delete');
-/**
- * Connections
- */
-Route::get('post/{user_id}/connections', [ConnectsController::class, 'connections'])->name('posts.connections');
-Route::get('post/{user_id}/connections/{page_number}', [ConnectsController::class, 'connectionsMoreResults'])->name('posts.connections.page');
-Route::get('post/{user_id}/followers', [ConnectsController::class, 'followers'])->name('posts.followers');
-Route::get('post/{user_id}/followers/{page_number}', [ConnectsController::class, 'followersMoreResults'])->name('posts.followers.page');
-Route::get('post/{user_id}/following', [ConnectsController::class, 'following'])->name('posts.following');
-Route::get('post/{user_id}/following/{page_number}', [ConnectsController::class, 'followingMoreResults'])->name('posts.following.page');
-/**
- * Timeline
- */
-Route::get('timeline/', [TimelineController::class, 'index'])->name('timeline');
-Route::get('timeline/{page_number}', [TimelineController::class, 'postsMoreResults'])->name('timeline.page');
+    /**
+     * Likes
+     */
+    Route::get('post/{post_id}/toggle-like', [LikesController::class, 'store'])->name('post.like.store');
+    Route::get('post/{post_id}/list-likes', [LikesController::class, 'list'])->name('post.like.list');
+
+    /**
+     * Comments
+     */
+    Route::post('post/comment', [CommentsController::class, 'store'])->name('post.comment.store');
+    Route::post('post/comment/list', [CommentsController::class, 'list'])->name('post.comment.list');
+    Route::post('post/comment/list-more', [CommentsController::class, 'listMore'])->name('post.comment.list-more');
+    Route::post('post/comment/delete', [CommentsController::class, 'destroy'])->name('post.comment.delete');
+    /**
+     * Connections
+     */
+    Route::get('post/{user_id}/connections', [ConnectsController::class, 'connections'])->name('posts.connections');
+    Route::get('post/{user_id}/connections/{page_number}', [ConnectsController::class, 'connectionsMoreResults'])->name('posts.connections.page');
+    Route::get('post/{user_id}/followers', [ConnectsController::class, 'followers'])->name('posts.followers');
+    Route::get('post/{user_id}/followers/{page_number}', [ConnectsController::class, 'followersMoreResults'])->name('posts.followers.page');
+    Route::get('post/{user_id}/following', [ConnectsController::class, 'following'])->name('posts.following');
+    Route::get('post/{user_id}/following/{page_number}', [ConnectsController::class, 'followingMoreResults'])->name('posts.following.page');
+    /**
+     * Timeline
+     */
+    Route::get('timeline/', [TimelineController::class, 'index'])->name('timeline');
+    Route::get('timeline/{page_number}', [TimelineController::class, 'postsMoreResults'])->name('timeline.page');
+});
+
+
+
+
+require __DIR__.'/auth.php';
