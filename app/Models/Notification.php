@@ -22,23 +22,24 @@ class Notification extends Model
         'user_id_receive',
         'user_id_send',
         'post_id',
+        'state',
     ];
 
     //Usuario propietario de la notificacion
     public function userReceive()
     {
-        return $this->belongsTo(User::class, 'id', 'user_id_receive');
+        return $this->belongsTo(User::class,  'user_id_receive','id');
     }
 
     //Usuario que envia la notificacion
     public function userSend()
     {
-        return $this->belongsTo(User::class, 'id', 'user_id_send');
+        return $this->belongsTo(User::class,  'user_id_send', 'id');
     }
 
     //Post
     public function post()
     {
-        return $this->belongsTo(Post::class, 'id', 'post_id');
+        return $this->belongsTo(Post::class, 'post_id', 'id');
     }
 }

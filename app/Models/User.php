@@ -138,9 +138,30 @@ class User extends Authenticatable
     /**
      * Auto relacion N a N , notificaciones del usuario
      */
+    // public function noticationsReceive()
+    // {
+    //     return $this->belongsToMany(User::class,'notifications', 'user_id_receive', 'user_id_send')
+    //                 ->withPivot(['id', 'type', 'post_id'])
+    //                 ->withTimestamps()
+    //                 ->select('users.id','users.name', 'users.profile_image');
+    // }
+
+
+    /**
+     * Auto relacion N a N , notificaciones recibidas del usuario (leidas y no leidas)
+     */
     public function noticationsReceive()
     {
-        return $this->belongsToMany(User::class,'notifications', 'user_id_receive', 'user_id_send');
+        return $this->hasMany(Notification::class, 'user_id_receive'); //uso has many para obtener solo informacion de la notificacion
+    }
+
+    /**
+     *  Notificaciones del usuario que no fueron leidas
+     */
+    public function noticationsReceiveUnread()
+    {
+        return $this->hasMany(Notification::class, 'user_id_receive')
+                    ->where('notifications.state', '=', 'U'); //uso has many para obtener solo informacion de la notificacion
     }
 
 }
