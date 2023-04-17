@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,6 +35,9 @@ class LikesController extends Controller
             $post->likes()->attach(auth()->user()->id);
             $message =  'Like to post succesfull.';
             $like = true;
+            //Se genera notificacion del tipo Post Like (PL)
+            $notification = new Notification(["type"=> 'PL', 'user_id_receive' => $post->user_id ,'user_id_send' => auth()->user()->id, "post_id" => $post->id]);
+            $notification->save();
         }
 
         //Response

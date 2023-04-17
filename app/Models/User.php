@@ -135,4 +135,12 @@ class User extends Authenticatable
                     ->limit($limit);
     }
 
+    /**
+     * Auto relacion N a N , notificaciones del usuario
+     */
+    public function noticationsReceive()
+    {
+        return $this->belongsToMany(User::class,'notifications', 'user_id_receive', 'user_id_send');
+    }
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\User;
 use App\Traits\ConnectionsTrait;
 use Illuminate\Http\Request;
@@ -99,6 +100,17 @@ class ConnectsController extends Controller
 
             if (User::find($user_id_receive)->followingTo()->get()->contains($user_id_send))  $connected  = true;
             else $connected = false;
+            //Se genera notificacion del tipo User Follow (UF)
+            $notification = new Notification(["type"=> 'UF', 'user_id_receive' => $user_id_receive ,'user_id_send' => $user_id_send ]);
+            $notification->save();
+
+            if ($connected) {
+                //Se genera notificacion del tipo User Connected (UC)
+                $notificationConnected = new Notification(["type"=> 'UC', 'user_id_receive' => $user_id_receive ,'user_id_send' => $user_id_send ]);
+                $notificationConnected->save();
+            }
+
+
             // $connected = User::find($user_id_receive)->followingTo()->get()->contains($user_id_send) ? true : false;
             return response()->json([
                 'state' => true,

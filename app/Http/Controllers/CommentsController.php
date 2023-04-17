@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -49,6 +50,9 @@ class CommentsController extends Controller
 
             //Se guarda el comenteario
             $post->comments()->attach(auth()->user()->id, ['content' => $request->content_comment]);
+            //Se genera notificacion del tipo Post Comment (PC)
+            $notification = new Notification(["type"=> 'PC', 'user_id_receive' => $post->user_id ,'user_id_send' => auth()->user()->id, "post_id" => $post->id]);
+            $notification->save();
 
             $comment = $post->comments()
                             ->get()
