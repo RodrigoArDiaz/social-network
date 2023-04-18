@@ -152,7 +152,8 @@ class User extends Authenticatable
      */
     public function noticationsReceive()
     {
-        return $this->hasMany(Notification::class, 'user_id_receive'); //uso has many para obtener solo informacion de la notificacion
+        return $this->hasMany(Notification::class, 'user_id_receive')
+                    ->orderBy('notifications.created_at', 'desc'); //uso has many para obtener solo informacion de la notificacion
     }
 
     /**
@@ -161,7 +162,8 @@ class User extends Authenticatable
     public function noticationsReceiveUnread()
     {
         return $this->hasMany(Notification::class, 'user_id_receive')
-                    ->where('notifications.state', '=', 'U'); //uso has many para obtener solo informacion de la notificacion
+                    ->where('notifications.state', '=', 'U')
+                    ->orderBy('notifications.created_at', 'desc'); //uso has many para obtener solo informacion de la notificacion
     }
 
 }

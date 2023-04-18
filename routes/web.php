@@ -3,10 +3,10 @@
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\ConnectsController;
 use App\Http\Controllers\LikesController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TimelineController;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.delete');
     Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
     Route::patch('/post/{post}',[PostController::class, 'update'])->name('post.update');
+    Route::get('/post/{post}/show', [PostController::class, 'show'])->name('post.show');
 
     /**
      * Connect
@@ -92,6 +93,10 @@ Route::middleware('auth')->group(function () {
      */
     Route::get('timeline/', [TimelineController::class, 'index'])->name('timeline');
     Route::get('timeline/{page_number}', [TimelineController::class, 'postsMoreResults'])->name('timeline.page');
+    /**
+     * Notifications
+     */
+    Route::get('/notifications/list-unread',  [NotificationController::class, 'listUnreadNotifications'])->name('notification.list.unread');
 });
 
 

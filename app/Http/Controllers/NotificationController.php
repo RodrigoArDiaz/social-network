@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -81,5 +82,42 @@ class NotificationController extends Controller
     public function destroy(Notification $notification)
     {
         //
+    }
+
+
+    /**
+     * Lista las notificationes
+     */
+    public function listUnreadNotifications()
+    {
+        return response()->json([
+            'state' => true,
+            'notifications' =>  auth()->user()
+                                      ->noticationsReceive()
+                                      ->get()
+                                      ->each(function($notification){
+                                        $now = \Carbon\Carbon::now();
+                                        $notification['time_diference'] = str_replace('before', 'ago', Carbon::parse($notification['created_at'])->diffForHumans($now));
+                                        switch ($notification['type']) {
+                                            case 'UF':
+                                                $notification['route_redirect'] = route('posts', $notification['user_id_send']);
+                                                break;
+                                            case 'UC':
+                                                $notification['route_redirect'] = route('posts', $notification['user_id_send']);
+                                                break;
+                                            case 'PC':
+                                                $notification['route_redirect'] = route('post.show', $notification['post_id']);
+                                                break;
+                                            case 'PL':
+                                                $notification['route_redirect'] = route('post.show', $notification['post_id']);
+                                                break;
+                                            default:
+                                                # code...
+                                                break;
+                                        }
+                                      })
+                                      ->load('userSend'),
+            'count_notifications' => auth()->user()->noticationsReceive()->get()->count(),
+        ],200);
     }
 }

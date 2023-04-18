@@ -37,6 +37,7 @@
 
         {{-- Scripts --}}
         <script src="/js/helpers/index.js"></script>
+        <script src="/js/notifications/index.js"></script>
         @if (request()->routeIs('profile.edit'))
             <script src="/js/profile/index.js"></script>
         @endif
@@ -83,6 +84,12 @@
             <script src="/js/posts/comment-list.js"></script>
             <script src="/js/posts/post-likes-list.js"></script>
             <script src="/js/timeline/index.js"></script>
+        @endif
+        @if (request()->routeIs('post.show'))
+            <script src="/js/posts/post-like.js"></script>
+            <script src="/js/posts/comment.js"></script>
+            <script src="/js/posts/comment-list.js"></script>
+            <script src="/js/posts/post-likes-list.js"></script>
         @endif
     </body>
 </html>
