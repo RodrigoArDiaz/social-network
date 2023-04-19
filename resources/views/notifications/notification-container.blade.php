@@ -1,6 +1,6 @@
 <div>
     <div class="px-3 pt-3">
-        <h3 class="font-medium">Notifications</h3>
+        <h3 class="font-medium">Unread notifications</h3>
     </div>
     {{-- Content --}}
     <div id="container-notifications" class="py-2 divide-y divide-slate-400/20 rounded-lg bg-transparent leading-5 text-slate-900   ring-slate-700/10">
@@ -11,5 +11,10 @@
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
         </div>
+    </div>
+    <div class="flex flex-col py-3 text-center border-slate-400/20 border-t-[1px]">
+        <a href="{{route('notifications')}}" class="flex justify-center font-medium text-sm align-middle text-indigo-500">
+            View all notifications
+        </a>
     </div>
 </div>

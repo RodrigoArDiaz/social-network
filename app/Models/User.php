@@ -157,6 +157,17 @@ class User extends Authenticatable
     }
 
     /**
+     *
+     */
+    public function noticationsReceiveWithLimit($offset, $limit)
+    {
+        return $this->hasMany(Notification::class, 'user_id_receive')
+                    ->orderBy('notifications.created_at', 'desc')
+                    ->offset($offset)
+                    ->limit($limit); //uso has many para obtener solo informacion de la notificacion
+    }
+
+    /**
      *  Notificaciones del usuario que no fueron leidas
      */
     public function noticationsReceiveUnread()
@@ -164,6 +175,18 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class, 'user_id_receive')
                     ->where('notifications.state', '=', 'U')
                     ->orderBy('notifications.created_at', 'desc'); //uso has many para obtener solo informacion de la notificacion
+    }
+
+    /**
+     *  Notificaciones del usuario que no fueron leidas
+     */
+    public function noticationsReceiveUnreadWithLimit($offset, $limit)
+    {
+        return $this->hasMany(Notification::class, 'user_id_receive')
+                    ->where('notifications.state', '=', 'U')
+                    ->orderBy('notifications.created_at', 'desc')
+                    ->offset($offset)
+                    ->limit($limit); //uso has many para obtener solo informacion de la notificacion
     }
 
 }

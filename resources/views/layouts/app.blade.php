@@ -38,6 +38,9 @@
         {{-- Scripts --}}
         <script src="/js/helpers/index.js"></script>
         <script src="/js/notifications/index.js"></script>
+        @if (request()->routeIs('notifications'))
+            <script src="/js/notifications/notifications-more-results.js"></script>
+        @endif
         @if (request()->routeIs('profile.edit'))
             <script src="/js/profile/index.js"></script>
         @endif

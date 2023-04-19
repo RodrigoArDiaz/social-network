@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
+    private $limit = 20;
     /**
      * Display a listing of the resource.
      *
@@ -15,75 +16,75 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        //
+        $user = auth()->user();
+        return view('notifications' , ['notifications' => $user->noticationsReceiveWithLimit(0,20)
+                                                               ->get()
+                                                               ->each(function($notification){
+                                                                    $now = \Carbon\Carbon::now();
+                                                                    $notification['time_diference'] = str_replace('before', 'ago', Carbon::parse($notification['created_at'])->diffForHumans($now));
+                                                                    switch ($notification['type']) {
+                                                                        case 'UF':
+                                                                            $notification['route_redirect'] = route('posts', $notification['user_id_send']);
+                                                                            break;
+                                                                        case 'UC':
+                                                                            $notification['route_redirect'] = route('posts', $notification['user_id_send']);
+                                                                            break;
+                                                                        case 'PC':
+                                                                            $notification['route_redirect'] = route('post.show', $notification['post_id']);
+                                                                            break;
+                                                                        case 'PL':
+                                                                            $notification['route_redirect'] = route('post.show', $notification['post_id']);
+                                                                            break;
+                                                                        default:
+                                                                            # code...
+                                                                            break;
+                                                                    }
+                                                                })
+                                                                ->load('userSend')
+                                                                ->toJson()
+                                                                ,]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function moreResults($page_number)
     {
-        //
-    }
+        $user = auth()->user();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $notifications = $user->noticationsReceiveWithLimit(($page_number - 1)*$this->limit, $this->limit)
+                                ->get()
+                                ->each(function($notification){
+                                    $now = \Carbon\Carbon::now();
+                                    $notification['time_diference'] = str_replace('before', 'ago', Carbon::parse($notification['created_at'])->diffForHumans($now));
+                                    switch ($notification['type']) {
+                                        case 'UF':
+                                            $notification['route_redirect'] = route('posts', $notification['user_id_send']);
+                                            break;
+                                        case 'UC':
+                                            $notification['route_redirect'] = route('posts', $notification['user_id_send']);
+                                            break;
+                                        case 'PC':
+                                            $notification['route_redirect'] = route('post.show', $notification['post_id']);
+                                            break;
+                                        case 'PL':
+                                            $notification['route_redirect'] = route('post.show', $notification['post_id']);
+                                            break;
+                                        default:
+                                            # code...
+                                            break;
+                                    }
+                                })
+                                ->load('userSend');
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Notification  $notification
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Notification $notification)
-    {
-        //
+        //Retorno de json
+        return response()->json([
+            'state' => true,
+            'notifications' =>   $notifications,
+        ],200);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Notification  $notification
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Notification $notification)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Notification  $notification
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Notification $notification)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Notification  $notification
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Notification $notification)
-    {
-        //
-    }
-
 
     /**
      * Lista las notificationes
@@ -93,7 +94,7 @@ class NotificationController extends Controller
         return response()->json([
             'state' => true,
             'notifications' =>  auth()->user()
-                                      ->noticationsReceive()
+                                      ->noticationsReceiveUnreadWithLimit(0,8)
                                       ->get()
                                       ->each(function($notification){
                                         $now = \Carbon\Carbon::now();
