@@ -3,7 +3,7 @@
         <h3 class="font-medium">Unread notifications</h3>
     </div>
     {{-- Content --}}
-    <div id="container-notifications" class="py-2 divide-y divide-slate-400/20 rounded-lg bg-transparent leading-5 text-slate-900   ring-slate-700/10">
+    <div id="container-notifications" class="py-2  rounded-lg bg-transparent leading-5 text-slate-900   ring-slate-700/10">
         {{-- <x-notifications.notification-card/> --}}
         <div class="w-full flex justify-center py-3">
             <svg id="spinner-notifications" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

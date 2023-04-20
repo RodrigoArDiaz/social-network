@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 class NotificationController extends Controller
 {
     private $limit = 20;
+    private $limitUnreadNotifications = 8;
     /**
      * Display a listing of the resource.
      *
@@ -87,14 +88,19 @@ class NotificationController extends Controller
     }
 
     /**
-     * Lista las notificationes
+     * Lista las notificationes no leidas
      */
     public function listUnreadNotifications()
     {
+        //
+        $count_notifications = auth()->user()->noticationsReceiveUnread()->get()->count();
+        $exceeds_max = $count_notifications > $this->limitUnreadNotifications ? true : false;
+        $excess = $exceeds_max ? $count_notifications - $this->limitUnreadNotifications : 0;
+
         return response()->json([
             'state' => true,
             'notifications' =>  auth()->user()
-                                      ->noticationsReceiveUnreadWithLimit(0,8)
+                                      ->noticationsReceiveUnreadWithLimit(0,$this->limitUnreadNotifications)
                                       ->get()
                                       ->each(function($notification){
                                         $now = \Carbon\Carbon::now();
@@ -118,13 +124,15 @@ class NotificationController extends Controller
                                         }
                                       })
                                       ->load('userSend'),
-            'count_notifications' => auth()->user()->noticationsReceive()->get()->count(),
+            'count_notifications' => $count_notifications,
+            'exceeds_max' => $exceeds_max,
+            'excess' => $excess,
         ],200);
     }
 
 
     /**
-     *
+     * Marca una notificacion como leida (cambia el estado)
      */
     public function read($notification_id)
     {

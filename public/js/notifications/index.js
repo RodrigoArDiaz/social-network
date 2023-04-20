@@ -20,6 +20,7 @@ const handlerButtonNotifications = () => {
             console.log(resp.data);
             if (Boolean(resp.data.state)) {
                 insertNotifications(resp.data);
+                addEventToButtonReadNotificationDropdown();
             }
         })
         .catch((error) => console.log(error));
@@ -37,6 +38,13 @@ const insertNotifications = (data) => {
             createNotificationCard(notification)
         );
     });
+
+    if (data.exceeds_max) {
+        container.insertAdjacentHTML(
+            "beforeend",
+            `<p class="text-center border-t-0 font-medium">+${data.excess}</p>`
+        );
+    }
 };
 
 /**
@@ -74,7 +82,7 @@ const createNotificationCard = (notification) => {
             break;
     }
 
-    return `<div class="py-1 cursor-pointer">
+    return `<div class="notification-card-dropdown py-1 cursor-pointer  border-slate-400/20 border-t-[1px] " data-id="${notification.id}">
                 <a href='${notification.route_redirect}'>
                     <div class="flex items-center px-2">
                         <img class="w-8 h-8 rounded-full mx-auto object-cover" src="${notification.user_send.profile_image}" alt="">
@@ -90,4 +98,35 @@ const createNotificationCard = (notification) => {
                     </p>
                 </a>
             </div>`;
+};
+
+/**
+ * Añade evento a card de notificaciones de dropdown
+ */
+const addEventToButtonReadNotificationDropdown = () => {
+    //Seleccionas todos los button follow
+    $readButton = document.querySelectorAll(".notification-card-dropdown");
+
+    //A cada uno le añade un evento
+    $readButton.forEach((button) => {
+        //Remueve el evento si ya lo tiene
+        button.removeEventListener("click", handlerClickButtonReadNotification);
+        //Añade el evento
+        button.addEventListener("click", handlerClickButtonReadNotification);
+    });
+};
+
+/**
+ *
+ */
+const handlerClickButtonReadNotification = (e) => {
+    let element = e.currentTarget;
+    let notificationId = element.getAttribute("data-id");
+
+    axios
+        .get(`/notifications/${notificationId}/read`)
+        .then((resp) => {
+            console.log(resp);
+        })
+        .catch((error) => console.log(error));
 };

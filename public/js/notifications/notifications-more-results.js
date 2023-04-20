@@ -31,21 +31,6 @@ const addEventToButtonReadNotification = () => {
     });
 };
 
-/**
- *
- */
-const handlerClickButtonReadNotification = (e) => {
-    let element = e.currentTarget;
-    let notificationId = element.getAttribute("data-id");
-
-    axios
-        .get(`/notifications/${notificationId}/read`)
-        .then((resp) => {
-            console.log(resp);
-        })
-        .catch((error) => console.log(error));
-};
-
 /*********************************************
  * Request to users following
  */
