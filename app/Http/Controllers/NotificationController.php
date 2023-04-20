@@ -121,4 +121,20 @@ class NotificationController extends Controller
             'count_notifications' => auth()->user()->noticationsReceive()->get()->count(),
         ],200);
     }
+
+
+    /**
+     *
+     */
+    public function read($notification_id)
+    {
+        $notification = Notification::find($notification_id);
+        $notification->state = 'R';
+        $notification->save();
+        $notification->touch();
+        return response()->json([
+                                'state' => true,
+                                'message' => 'Notification read',
+        ],200);
+    }
 }

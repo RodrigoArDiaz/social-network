@@ -1,5 +1,9 @@
 let page = 1;
 
+window.addEventListener("load", () => {
+    addEventToButtonReadNotification();
+});
+
 /*****************************
  * Evento para scroll infinito
  * */
@@ -11,13 +15,44 @@ window.addEventListener(
     false
 );
 
+/**
+ *
+ */
+const addEventToButtonReadNotification = () => {
+    //Seleccionas todos los button follow
+    $readButton = document.querySelectorAll(".notification-card");
+
+    //A cada uno le añade un evento
+    $readButton.forEach((button) => {
+        //Remueve el evento si ya lo tiene
+        button.removeEventListener("click", handlerClickButtonReadNotification);
+        //Añade el evento
+        button.addEventListener("click", handlerClickButtonReadNotification);
+    });
+};
+
+/**
+ *
+ */
+const handlerClickButtonReadNotification = (e) => {
+    let element = e.currentTarget;
+    let notificationId = element.getAttribute("data-id");
+
+    axios
+        .get(`/notifications/${notificationId}/read`)
+        .then((resp) => {
+            console.log(resp);
+        })
+        .catch((error) => console.log(error));
+};
+
 /*********************************************
  * Request to users following
  */
 const searchMoreResults = () => {
     if (
         document.body.scrollHeight - window.innerHeight ===
-        Math.ceil(window.scrollY) - 1
+        Math.ceil(window.scrollY)
     ) {
         page++;
         axios
@@ -27,6 +62,7 @@ const searchMoreResults = () => {
                     console.log(resp.data);
                     if (resp.data.notifications.length != 0) {
                         insertResults(resp.data);
+                        addEventToButtonReadNotification();
                     }
                 }
             })
@@ -87,7 +123,7 @@ const createElement = (notification) => {
             '<div class="h-2 w-2 bg-gray-400 rounded-full flex-inline"></div>';
     }
 
-    return `<div class="py-2 cursor-pointer rounded-lg bg-white text-[0.8125rem] leading-5 text-slate-900   ring-slate-700/10">
+    return `<div class="notification-card py-2 cursor-pointer rounded-lg bg-white text-[0.8125rem] leading-5 text-slate-900   ring-slate-700/10" data-id="${notification.id}">
                 <a href='${notification.route_redirect}'>
                     <div class="flex items-center px-2">
                         <img class="w-8 h-8 rounded-full mx-auto object-cover" src="${notification.user_send.profile_image}" alt="">

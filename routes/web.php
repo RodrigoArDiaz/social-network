@@ -98,6 +98,7 @@ Route::middleware('auth')->group(function () {
      */
     Route::get('/notifications',  [NotificationController::class, 'index'])->name('notifications');
     Route::get('/notifications/more-results/{page_number}',  [NotificationController::class, 'moreResults'])->name('notifications.more-results');
+    Route::get('/notifications/{notification_id}/read',  [NotificationController::class, 'read'])->name('notifications.read');
     Route::get('/notifications/list-unread',  [NotificationController::class, 'listUnreadNotifications'])->name('notification.list.unread');
 });
 

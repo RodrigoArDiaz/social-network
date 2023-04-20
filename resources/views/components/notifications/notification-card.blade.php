@@ -2,8 +2,9 @@
 
 
 
-<div class="py-2 cursor-pointer rounded-lg bg-white text-[0.8125rem] leading-5 text-slate-900   ring-slate-700/10">
+<div class="notification-card py-2 cursor-pointer rounded-lg bg-white text-[0.8125rem] leading-5 text-slate-900   ring-slate-700/10" data-id="{{$notification->id}}">
     <a href='{{$notification->route_redirect}}'>
+    {{-- <a href="#"> --}}
         <div class="flex items-center px-2">
             <img class="w-8 h-8 rounded-full mx-auto object-cover" src="{{$user_send->profile_image}}" alt="">
             <p class="text-base flex-auto px-2">
