@@ -88,7 +88,7 @@
             <script src="/js/posts/post-likes-list.js"></script>
             <script src="/js/timeline/index.js"></script>
         @endif
-        @if (request()->routeIs('post.show'))
+        @if (request()->routeIs('post.show') || request()->routeIs('post.show.comment'))
             <script src="/js/posts/post-like.js"></script>
             <script src="/js/posts/comment.js"></script>
             <script src="/js/posts/comment-list.js"></script>

@@ -15,9 +15,21 @@
         <x-containers.main-section>
             @php
                 $isUserPost = false;
-                $isFollowing = true
+                $isFollowing = true;
+                $isStarredComment = false;
+                if (isset($starredComment)) {
+                    $isStarredComment = true;
+                }else {
+                    $starredComment =null;
+                }
             @endphp
-            <x-post :user="$user" :post="$post" :isUserPost="$isUserPost" :isFollowing="$isFollowing"/>
+                <x-post :user="$user"
+                        :post="$post"
+                        :isUserPost="$isUserPost"
+                        :isFollowing="$isFollowing"
+                        :isStarredComment="$isStarredComment"
+                        :starredComment="$starredComment" />
+
         </x-containers.main-section>
         {{-- Right section --}}
         <x-containers.right-section>

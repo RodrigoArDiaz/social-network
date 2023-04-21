@@ -23,6 +23,7 @@ class Notification extends Model
         'user_id_send',
         'post_id',
         'state',
+        'comment_id',
     ];
 
     //Usuario propietario de la notificacion

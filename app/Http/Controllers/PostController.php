@@ -175,6 +175,37 @@ class PostController extends Controller
                                      ]);
     }
 
+    /**************************************
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function showWithComment(Post $post, $comment_id)
+    {
+        $user = auth()->user();
+        $post->likes_count = $post->likes()->get()->count();
+        $post->comments_count = $post->comments()->get()->count();
+        $post->likes = [];
+        if ($post->likes()->get()->contains($user->id)) {
+            $post->likes = ['userLikePos' => true];
+        }
+        //Se recupera comentario destacado
+        $starredComment = $post->comments()->wherePivot('id', $comment_id)->get();
+
+        //Uso de la funcion del trait
+        $userInformationConnections  = $this->userInformationConnections($user->id);
+
+        return view('post.post-show', ['user' => $user,
+                                       'post' => $post,
+                                       'numberOfFollowers' => $userInformationConnections['numberOfFollowers'],
+                                       'numberOfFollowing' => $userInformationConnections['numberOfFollowing'],
+                                       'numberOfConnections' => $userInformationConnections['numberOfConnections'],
+                                       'numberOfPosts' => $userInformationConnections['numberOfPosts'],
+                                       'starredComment' => $starredComment,
+                                     ]);
+    }
+
     /****************************************
      * Show the form for editing the specified resource.
      *

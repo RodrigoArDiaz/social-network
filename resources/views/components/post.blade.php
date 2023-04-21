@@ -1,4 +1,4 @@
-@props(['user','post', 'isUserPost','isFollowing'])
+@props(['user','post', 'isUserPost','isFollowing', 'isStarredComment' => false , 'starredComment' => []])
 
 <div class="py-0 ">
     <div class="">
@@ -208,6 +208,72 @@
                             </p>
                         </div>
                     </div>
+
+                    {{-- Comentario destacado --}}
+                    @if ((boolean)$isStarredComment)
+                        @if ( count($starredComment) == 0)
+                            <div>
+                                <div class="px-4 py-2" id="comment-container-${commentId}">
+                                    <div  class="bg-gray-100 px-3 py-2 rounded-lg" >
+                                        <div class="flex text-center">
+                                                <p class="text-base flex-auto p-2">
+                                                    The comment doesn't exist
+                                                </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            @php
+                                $comment = $starredComment[0];
+                            @endphp
+                            <div>
+                                <div class="px-4 py-2">
+                                    <div  class="bg-gray-100 px-3 py-2 rounded-lg" >
+                                        <div class="flex">
+                                            <div class="hidden md:flex flex-none py-2 px-1 ">
+                                                <div class="flex h-full justify-start flex-col">
+                                                    <img class="w-8 h-8 rounded-full mx-auto object-cover"
+                                                        src="{{$comment->profile_image}}" alt=""
+                                                    >
+                                                </div>
+                                            </div>
+
+                                            <div class="grow">
+                                                <div class="flex flex-row justify-between">
+
+                                                    <div class="flex">
+                                                        <div class="flex min-w-[35px] md:hidden h-full justify-start flex-col">
+                                                            <img class="w-7 h-7 md:w-8 md:h-8 rounded-full mx-auto object-cover"
+                                                                src="{{$comment->profile_image}}" alt=""
+                                                            >
+                                                        </div>
+                                                        <div>
+                                                        <div class="font-medium inline-flex  px-2">{{$comment->name}} </div>
+                                                            <div  class="hidden md:inline-flex">-</div>
+                                                            <div class=" text-slate-700 px-2 inline-flex">
+                                                                {{{$comment->pivot->created_at}}}
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="">
+                                                    <p class="text-base flex-auto p-2">
+                                                        {{$comment->pivot->content}}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                    @endif
 
                     {{-- Comments list --}}
                     <div id="container-comments-{{$post->id}}"  class="bg-white overflow-hidden transition-all duration-500 max-h-0 border-none border-transparent  peer-checked:border peer-checked:border-gray-900">

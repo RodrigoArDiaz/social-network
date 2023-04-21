@@ -56,6 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
     Route::patch('/post/{post}',[PostController::class, 'update'])->name('post.update');
     Route::get('/post/{post}/show', [PostController::class, 'show'])->name('post.show');
+    Route::get('/post/{post}/show/{comment_id}', [PostController::class, 'showWithComment'])->name('post.show.comment');
 
     /**
      * Connect

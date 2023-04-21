@@ -32,12 +32,19 @@ const handlerButtonNotifications = () => {
 const insertNotifications = (data) => {
     let container = document.getElementById("container-notifications");
     container.innerHTML = "";
-    data.notifications.map((notification) => {
+    if (data.notifications.length == 0) {
         container.insertAdjacentHTML(
             "beforeend",
-            createNotificationCard(notification)
+            "<div class='text-center py-4'><p>You don't have unread notifications.</p></div>"
         );
-    });
+    } else {
+        data.notifications.map((notification) => {
+            container.insertAdjacentHTML(
+                "beforeend",
+                createNotificationCard(notification)
+            );
+        });
+    }
 
     if (data.exceeds_max) {
         container.insertAdjacentHTML(

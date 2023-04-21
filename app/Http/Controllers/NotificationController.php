@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
+use App\Traits\ConnectionsTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
+    use ConnectionsTrait;
+    //
     private $limit = 20;
     private $limitUnreadNotifications = 8;
     /**
@@ -31,7 +34,7 @@ class NotificationController extends Controller
                                                                             $notification['route_redirect'] = route('posts', $notification['user_id_send']);
                                                                             break;
                                                                         case 'PC':
-                                                                            $notification['route_redirect'] = route('post.show', $notification['post_id']);
+                                                                            $notification['route_redirect'] = route('post.show.comment',[ 'post' => $notification['post_id'], 'comment_id' => $notification['comment_id'] ]);
                                                                             break;
                                                                         case 'PL':
                                                                             $notification['route_redirect'] = route('post.show', $notification['post_id']);
@@ -55,6 +58,15 @@ class NotificationController extends Controller
     {
         $user = auth()->user();
 
+        //Verificacion del numero de pagina
+        if (!$this->isPageNumberValid($page_number)) {
+            return response()->json([
+                'state' => false,
+                 'message' => 'Page number is invalid.'
+            ],200);
+        }
+
+
         $notifications = $user->noticationsReceiveWithLimit(($page_number - 1)*$this->limit, $this->limit)
                                 ->get()
                                 ->each(function($notification){
@@ -68,7 +80,7 @@ class NotificationController extends Controller
                                             $notification['route_redirect'] = route('posts', $notification['user_id_send']);
                                             break;
                                         case 'PC':
-                                            $notification['route_redirect'] = route('post.show', $notification['post_id']);
+                                            $notification['route_redirect'] = route('post.show.comment',[ 'post' => $notification['post_id'], 'comment_id' =>  $notification['comment_id'] ]);
                                             break;
                                         case 'PL':
                                             $notification['route_redirect'] = route('post.show', $notification['post_id']);
@@ -113,7 +125,7 @@ class NotificationController extends Controller
                                                 $notification['route_redirect'] = route('posts', $notification['user_id_send']);
                                                 break;
                                             case 'PC':
-                                                $notification['route_redirect'] = route('post.show', $notification['post_id']);
+                                                $notification['route_redirect'] = route('post.show.comment',[ 'post' => $notification['post_id'], 'comment_id' =>  $notification['comment_id'] ]);
                                                 break;
                                             case 'PL':
                                                 $notification['route_redirect'] = route('post.show', $notification['post_id']);
