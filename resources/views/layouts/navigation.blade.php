@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="fixed w-full z-50 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+<nav x-data="{ open: false, openNotification: false }" class="fixed w-full z-50 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -30,6 +30,33 @@
                         {{ __('Connect') }}
                     </x-nav-link>
                 </div>
+            </div>
+
+            {{-- Notifications --}}
+            <div class="flex items-center relative ml-auto mr-6 sm:mr-0">
+                <x-dropdown align="right" width="w-96">
+                    <x-slot name="trigger">
+                            <x-buttons.icon-button-secondary class="border-opacity-0 shadow-none flex" id="button-notifications" data="">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                                </svg>
+                                @php
+                                    $hiddenCount = '';
+                                    if (Auth::user()->noticationsReceiveUnread()->get()->count() == 0){
+                                        $hiddenCount = 'hidden';
+                                    }
+                                @endphp
+                                <p id="container-count-notification" class="{{$hiddenCount}} bg-red-500 text-white text-center text-sm h-5 min-w-[1.25rem] flex justify-center items-center w-auto rounded-full absolute top-0 left-0 p-1">
+                                    {{-- Unread notifications --}}
+                                    {{Auth::user()->noticationsReceiveUnread()->get()->count()}}
+                                </p>
+                            </x-buttons.icon-button-secondary>
+
+                    </x-slot>
+                    <x-slot name="content">
+                        @include('notifications.notification-container')
+                    </x-slot>
+                </x-dropdown>
             </div>
 
             <!-- Settings Dropdown -->

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationSent;
+use App\Models\Comment;
+use App\Models\Notification;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -48,7 +51,23 @@ class CommentsController extends Controller
             }
 
             //Se guarda el comenteario
-            $post->comments()->attach(auth()->user()->id, ['content' => $request->content_comment]);
+            // $post->comments()->attach(auth()->user()->id, ['content' => $request->content_comment]);
+            $newComment = new Comment(['content' => $request->content_comment, 'post_id' => $post->id, "user_id" => auth()->user()->id]);
+            $newComment->save();
+
+            //Se genera notificacion del tipo Post Comment (PC) si el post no es del usuario que comenta
+            if ($post->user_id != auth()->user()->id ) {
+                $notification = new Notification(["type"=> 'PC',
+                                                'user_id_receive' => $post->user_id ,
+                                                'user_id_send' => auth()->user()->id,
+                                                "post_id" => $post->id,
+                                                "comment_id" =>$newComment->id
+                                                ]);
+                $notification->save();
+
+                //Se emite evento
+                broadcast(new NotificationSent($notification))->toOthers();
+            }
 
             $comment = $post->comments()
                             ->get()

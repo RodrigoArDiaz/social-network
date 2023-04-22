@@ -3,10 +3,10 @@
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\ConnectsController;
 use App\Http\Controllers\LikesController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TimelineController;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,7 +46,12 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::post('user/update_profile_image', [ProfileController::class, 'update_profile_image'])->name('user.update_profile_image');
-
+    Route::post('user/auth', function(){
+        return response()->json([
+            'state' => true,
+            'userId' => auth()->user()->id,
+        ],200);
+    });
     /**
      * Posts
      */
@@ -55,6 +60,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.delete');
     Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
     Route::patch('/post/{post}',[PostController::class, 'update'])->name('post.update');
+    Route::get('/post/{post}/show', [PostController::class, 'show'])->name('post.show');
+    Route::get('/post/{post}/show/{comment_id}', [PostController::class, 'showWithComment'])->name('post.show.comment');
 
     /**
      * Connect
@@ -92,6 +99,18 @@ Route::middleware('auth')->group(function () {
      */
     Route::get('timeline/', [TimelineController::class, 'index'])->name('timeline');
     Route::get('timeline/{page_number}', [TimelineController::class, 'postsMoreResults'])->name('timeline.page');
+    /**
+     * Notifications
+     */
+    Route::get('/notifications',  [NotificationController::class, 'index'])->name('notifications');
+    Route::get('/notifications/more-results/{page_number}',  [NotificationController::class, 'moreResults'])->name('notifications.more-results');
+    Route::get('/notifications/{notification_id}/read',  [NotificationController::class, 'read'])->name('notifications.read');
+    Route::get('/notifications/list-unread',  [NotificationController::class, 'listUnreadNotifications'])->name('notification.list.unread');
+
+    /**
+     *
+    */
+
 });
 
 

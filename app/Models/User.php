@@ -135,4 +135,58 @@ class User extends Authenticatable
                     ->limit($limit);
     }
 
+    /**
+     * Auto relacion N a N , notificaciones del usuario
+     */
+    // public function noticationsReceive()
+    // {
+    //     return $this->belongsToMany(User::class,'notifications', 'user_id_receive', 'user_id_send')
+    //                 ->withPivot(['id', 'type', 'post_id'])
+    //                 ->withTimestamps()
+    //                 ->select('users.id','users.name', 'users.profile_image');
+    // }
+
+
+    /**
+     * Auto relacion N a N , notificaciones recibidas del usuario (leidas y no leidas)
+     */
+    public function noticationsReceive()
+    {
+        return $this->hasMany(Notification::class, 'user_id_receive')
+                    ->orderBy('notifications.created_at', 'desc'); //uso has many para obtener solo informacion de la notificacion
+    }
+
+    /**
+     *
+     */
+    public function noticationsReceiveWithLimit($offset, $limit)
+    {
+        return $this->hasMany(Notification::class, 'user_id_receive')
+                    ->orderBy('notifications.created_at', 'desc')
+                    ->offset($offset)
+                    ->limit($limit); //uso has many para obtener solo informacion de la notificacion
+    }
+
+    /**
+     *  Notificaciones del usuario que no fueron leidas
+     */
+    public function noticationsReceiveUnread()
+    {
+        return $this->hasMany(Notification::class, 'user_id_receive')
+                    ->where('notifications.state', '=', 'U')
+                    ->orderBy('notifications.created_at', 'desc'); //uso has many para obtener solo informacion de la notificacion
+    }
+
+    /**
+     *  Notificaciones del usuario que no fueron leidas
+     */
+    public function noticationsReceiveUnreadWithLimit($offset, $limit)
+    {
+        return $this->hasMany(Notification::class, 'user_id_receive')
+                    ->where('notifications.state', '=', 'U')
+                    ->orderBy('notifications.created_at', 'desc')
+                    ->offset($offset)
+                    ->limit($limit); //uso has many para obtener solo informacion de la notificacion
+    }
+
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Traits\ConnectionsTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,9 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
+    //Uso de trait
+    use ConnectionsTrait;
+    //
     private $disk = 'public';
     private $pathPost = 'posts/';
     /****************************************
@@ -152,7 +156,54 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        $user = auth()->user();
+        $post->likes_count = $post->likes()->get()->count();
+        $post->comments_count = $post->comments()->get()->count();
+        $post->likes = [];
+        if ($post->likes()->get()->contains($user->id)) {
+            $post->likes = ['userLikePos' => true];
+        }
+        //Uso de la funcion del trait
+        $userInformationConnections  = $this->userInformationConnections($user->id);
+
+        return view('post.post-show', ['user' => $user,
+                                       'post' => $post,
+                                       'numberOfFollowers' => $userInformationConnections['numberOfFollowers'],
+                                       'numberOfFollowing' => $userInformationConnections['numberOfFollowing'],
+                                       'numberOfConnections' => $userInformationConnections['numberOfConnections'],
+                                       'numberOfPosts' => $userInformationConnections['numberOfPosts'],
+                                     ]);
+    }
+
+    /**************************************
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function showWithComment(Post $post, $comment_id)
+    {
+        $user = auth()->user();
+        $post->likes_count = $post->likes()->get()->count();
+        $post->comments_count = $post->comments()->get()->count();
+        $post->likes = [];
+        if ($post->likes()->get()->contains($user->id)) {
+            $post->likes = ['userLikePos' => true];
+        }
+        //Se recupera comentario destacado
+        $starredComment = $post->comments()->wherePivot('id', $comment_id)->get();
+
+        //Uso de la funcion del trait
+        $userInformationConnections  = $this->userInformationConnections($user->id);
+
+        return view('post.post-show', ['user' => $user,
+                                       'post' => $post,
+                                       'numberOfFollowers' => $userInformationConnections['numberOfFollowers'],
+                                       'numberOfFollowing' => $userInformationConnections['numberOfFollowing'],
+                                       'numberOfConnections' => $userInformationConnections['numberOfConnections'],
+                                       'numberOfPosts' => $userInformationConnections['numberOfPosts'],
+                                       'starredComment' => $starredComment,
+                                     ]);
     }
 
     /****************************************

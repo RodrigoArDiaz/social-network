@@ -36,13 +36,8 @@
                                             {{-- Post's comments --}}
                                             <div class="flex items-center p-2 justify-center">
                                                     <p class="text-lg">
-                                                        @if ($isUserPost)
-                                                            You haven't created a post yet
-                                                        @else
-                                                            {{$user->name}} hasn't created a post yet
-                                                        @endif
-
-                                                        </p>
+                                                            No posts to show.
+                                                    </p>
                                             </div>
                                 </div>
 
