@@ -38,6 +38,7 @@
         {{-- Scripts --}}
         <script src="/js/helpers/index.js"></script>
         <script src="/js/notifications/index.js"></script>
+        <script src="/js/notifications/listening.js"></script>
         @if (request()->routeIs('notifications'))
             <script src="/js/notifications/notifications-more-results.js"></script>
         @endif

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationSent;
 use App\Models\Notification;
 use App\Models\User;
 use App\Traits\ConnectionsTrait;
@@ -103,11 +104,15 @@ class ConnectsController extends Controller
             //Se genera notificacion del tipo User Follow (UF)
             $notification = new Notification(["type"=> 'UF', 'user_id_receive' => $user_id_receive ,'user_id_send' => $user_id_send ]);
             $notification->save();
+            //Se emite evento
+            broadcast(new NotificationSent($notification))->toOthers();
 
             if ($connected) {
                 //Se genera notificacion del tipo User Connected (UC)
                 $notificationConnected = new Notification(["type"=> 'UC', 'user_id_receive' => $user_id_receive ,'user_id_send' => $user_id_send ]);
                 $notificationConnected->save();
+                //Se emite evento
+                broadcast(new NotificationSent($notificationConnected))->toOthers();
             }
 
 

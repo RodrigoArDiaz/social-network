@@ -46,7 +46,7 @@
                                         $hiddenCount = 'hidden';
                                     }
                                 @endphp
-                                <p class="{{$hiddenCount}} bg-red-500 text-white text-center text-sm h-5 min-w-[1.25rem] flex justify-center items-center w-auto rounded-full absolute top-0 left-0 p-1">
+                                <p id="container-count-notification" class="{{$hiddenCount}} bg-red-500 text-white text-center text-sm h-5 min-w-[1.25rem] flex justify-center items-center w-auto rounded-full absolute top-0 left-0 p-1">
                                     {{-- Unread notifications --}}
                                     {{Auth::user()->noticationsReceiveUnread()->get()->count()}}
                                 </p>

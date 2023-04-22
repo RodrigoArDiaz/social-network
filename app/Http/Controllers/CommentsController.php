@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationSent;
 use App\Models\Comment;
 use App\Models\Notification;
 use App\Models\Post;
@@ -63,6 +64,9 @@ class CommentsController extends Controller
                                                 "comment_id" =>$newComment->id
                                                 ]);
                 $notification->save();
+
+                //Se emite evento
+                broadcast(new NotificationSent($notification))->toOthers();
             }
 
             $comment = $post->comments()

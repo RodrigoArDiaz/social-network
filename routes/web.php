@@ -46,7 +46,12 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::post('user/update_profile_image', [ProfileController::class, 'update_profile_image'])->name('user.update_profile_image');
-
+    Route::post('user/auth', function(){
+        return response()->json([
+            'state' => true,
+            'userId' => auth()->user()->id,
+        ],200);
+    });
     /**
      * Posts
      */
@@ -101,6 +106,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications/more-results/{page_number}',  [NotificationController::class, 'moreResults'])->name('notifications.more-results');
     Route::get('/notifications/{notification_id}/read',  [NotificationController::class, 'read'])->name('notifications.read');
     Route::get('/notifications/list-unread',  [NotificationController::class, 'listUnreadNotifications'])->name('notification.list.unread');
+
+    /**
+     *
+    */
+
 });
 
 
